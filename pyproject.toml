@@ -1,0 +1,84 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "airflow-ai-sdk"
+dynamic = ["version"]
+description = "SDK for building LLM workflows and agents using Apache Airflow"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "apache-airflow>=2.7.0",
+    "typing-extensions>=4.0.0",
+    "pydantic-ai-slim<0.1.0",
+]
+
+[project.optional-dependencies]
+# models
+openai = ["pydantic-ai-slim[openai]<0.1.0"]
+cohere = ["pydantic-ai-slim[cohere]<0.1.0"]
+vertexai = ["pydantic-ai-slim[vertexai]<0.1.0"]
+anthropic = ["pydantic-ai-slim[anthropic]<0.1.0"]
+groq = ["pydantic-ai-slim[groq]<0.1.0"]
+mistral = ["pydantic-ai-slim[mistral]<0.1.0"]
+bedrock = ["pydantic-ai-slim[bedrock]<0.1.0"]
+
+# tools
+duckduckgo = ["pydantic-ai-slim[duckduckgo]<0.1.0"]
+
+# mcp
+mcp = ["pydantic-ai-slim[mcp]<0.1.0"]
+
+[tool.hatch.version]
+path = "airflow_ai_sdk/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["airflow_ai_sdk"]
+
+[project.entry-points.apache_airflow_provider]
+provider_info = "airflow_ai_sdk:get_provider_info"
+
+
+[tool.ruff]
+line-length = 88
+indent-width = 4
+exclude = ["tests", "examples"]
+
+target-version = "py313"
+
+[tool.ruff.lint]
+select = [
+    "ANN",  # Require type annotations on functions (flake8-annotations) – helps MyPy catch missing types
+    "TC",   # Enforce type-checking imports (flake8-type-checking) – e.g. heavy imports in `if TYPE_CHECKING` for faster startup
+    "B",    # Bugbear rules – catch common mistakes and potential issues, some with performance impact (flake8-bugbear)
+    "ARG",  # Flag unused function arguments (flake8-unused-arguments) – helps remove dead code and catch bugs
+    "C4",   # Optimize comprehensions (flake8-comprehensions) – avoid unnecessary list()/set() around generators
+    "SIM",  # Simplify expressions (flake8-simplify) – enforce idiomatic, efficient Python constructs
+    "PERF", # Performance tweaks (perflint) – flag code that can run faster
+    "FAST", # FastAPI-specific rules – catch common FastAPI issues (e.g. missing `Annotated` on deps, unused path params)
+    "S",    # Security checks (flake8-bandit) – warn about insecure patterns (use of eval, weak cryptography, etc.)
+    "RET",  # Return statement consistency (flake8-return) – e.g. no mix of return vs return None in the same function
+    "RSE",  # Raise statement hygiene (flake8-raise) – avoid raising generic Exceptions or improper usage
+    "N",    # PEP8 naming conventions (pep8-naming) – enforce standard naming for classes, variables, constants
+    "Q",    # Quote consistency (flake8-quotes) – enforce a consistent string quote style across the codebase
+    "I",    # Import order (isort) – ensure imports are sorted into groups (stdlib, third-party, local) for readability
+    "UP",   # Python upgrades (pyupgrade) – suggest modern syntax (f-strings, walrus operator, etc.) for clean, up-to-date code
+    "W293", # Avoid blank lines with whitespace
+]
+
+[tool.ruff.lint.flake8-annotations]
+mypy-init-return = true      # Don't require `-> None` on __init__ (MyPy treats __init__ as implicitly returning None)
+ignore-fully-untyped = false # Even fully untyped functions are reported (ensure *every* function has type hints)
+
+[tool.ruff.lint.flake8-type-checking]
+strict = true  # Treat missing type-checking guards strictly (e.g., insist on using `if TYPE_CHECKING` for imports of heavy modules)
+
+[tool.ruff.lint.flake8-quotes]
+inline-quotes = "double"    # Use double quotes for regular strings
+multiline-quotes = "double" # Use triple-double quotes for docstrings and multi-line strings
+
+[tool.uv]
+dev-dependencies = [
+    "ruff>=0.11.2",
+]

@@ -1,0 +1,11 @@
+astro
+.git
+.env
+airflow_settings.yaml
+logs/
+.venv
+airflow.db
+airflow.cfg
+__pycache__/
+**/*.pyc
+**/logs/**
