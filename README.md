@@ -8,7 +8,7 @@ To get started, install the package with any optional dependencies you need:
 pip install airflow-ai-sdk[openai,duckduckgo]
 ```
 
-Note that installing the package with no optional dependencies will install the slim version of the package, which does not include any LLM models or tools.
+Note that installing the package with no optional dependencies will install the slim version of the package, which does not include any LLM models or tools. The available optional packages are listed [here](https://github.com/astronomer/airflow-ai-sdk/blob/main/pyproject.toml#L17). While this SDK offers the optional dependencies for convenience sake, you can also install the optional dependencies from [Pydantic AI](https://ai.pydantic.dev/install/) directly.
 
 Table of Contents:
 
