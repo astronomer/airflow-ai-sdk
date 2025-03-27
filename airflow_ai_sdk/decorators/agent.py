@@ -11,8 +11,6 @@ from airflow_ai_sdk.operators.agent import AgentDecoratedOperator
 
 if TYPE_CHECKING:
     from airflow.decorators.base import TaskDecorator
-
-
 def agent(agent: Agent, **kwargs: dict[str, Any]) -> "TaskDecorator":
     """
     Decorator to make agent calls.
