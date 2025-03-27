@@ -84,4 +84,12 @@ multiline-quotes = "double" # Use triple-double quotes for docstrings and multi-
 [tool.uv]
 dev-dependencies = [
     "ruff>=0.11.2",
+    "pytest>=7.0.0",
+    "pytest-mock>=3.10.0",
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
