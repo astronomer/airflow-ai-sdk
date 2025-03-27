@@ -22,8 +22,8 @@ jobs:
       - name: install python
         run: uv python install
 
-      - name: install ruff
-        run: uv pip install ruff
+      - name: install dependencies
+        run: uv sync --all-extras --dev
 
       - name: ruff check
         run: ruff check --output-format=github .
