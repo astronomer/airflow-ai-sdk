@@ -3,7 +3,7 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-  build:
+  ruff:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -15,6 +15,9 @@ jobs:
 
       - name: install python
         run: uv python install
+
+      - name: install ruff
+        run: uv pip install ruff
 
       - name: ruff check
         run: ruff check --output-format=github .
