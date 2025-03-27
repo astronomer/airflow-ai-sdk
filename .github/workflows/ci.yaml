@@ -26,7 +26,7 @@ jobs:
         run: uv sync --all-extras --dev
 
       - name: ruff check
-        run: ruff check --output-format=github .
+        run: uv run ruff check --output-format=github .
 
       - name: ruff format
-        run: ruff format --check .
+        run: uv run ruff format --check .
