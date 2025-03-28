@@ -18,6 +18,7 @@ jobs:
         uses: astral-sh/setup-uv@v5
         with:
           version: "0.6.10"
+          enable-cache: true
 
       - name: install python
         run: uv python install
@@ -31,6 +32,9 @@ jobs:
       - name: ruff format
         run: uv run ruff format --check .
 
+      - name: minimize uv cache
+        run: uv cache prune --ci
+
   test:
     runs-on: ubuntu-latest
     steps:
@@ -40,6 +44,7 @@ jobs:
         uses: astral-sh/setup-uv@v5
         with:
           version: "0.6.10"
+          enable-cache: true
 
       - name: install python
         run: uv python install
@@ -49,3 +54,6 @@ jobs:
 
       - name: pytest
         run: uv run pytest -v
+
+      - name: minimize uv cache
+        run: uv cache prune --ci
