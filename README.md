@@ -2,7 +2,18 @@
 
 This repository contains an SDK for working with LLMs from Apache Airflow, based on [Pydantic AI](https://ai.pydantic.dev). It allows users to call LLMs and orchestrate agent calls directly within their Airflow pipelines using decorator-based tasks. The SDK leverages the familiar Airflow `@task` syntax with extensions like `@task.llm`, `@task.llm_branch`, and `@task.agent`.
 
-To get started, check out the [examples repository here](https://github.com/astronomer/ai-sdk-examples), which offers a full local Airflow instance with the AI SDK installed and 5 example pipelines. If you already have Airflow running, you can also install the package with any optional dependencies you need:
+To get started, check out the [examples repository here](https://github.com/astronomer/ai-sdk-examples), which offers a full local Airflow instance with the AI SDK installed and 5 example pipelines. To run this locally, run:
+
+```bash
+git clone https://github.com/astronomer/ai-sdk-examples.git
+cd ai-sdk-examples
+astro dev start
+```
+
+If you don't have the Astro CLI installed, run `brew install astro` (or see other options [here](https://www.astronomer.io/docs/astro/cli/install-cli)).
+
+
+If you already have Airflow running, you can also install the package with any optional dependencies you need:
 
 ```bash
 pip install airflow-ai-sdk[openai,duckduckgo]
