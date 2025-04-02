@@ -4,7 +4,6 @@ Module that contains the AirflowTool class.
 
 from pydantic_ai import Tool as PydanticTool
 from pydantic_ai.tools import AgentDepsT, _messages
-from typing import Any
 
 
 class WrappedTool(PydanticTool[AgentDepsT]):
@@ -16,8 +15,8 @@ class WrappedTool(PydanticTool[AgentDepsT]):
     async def run(
         self,
         message: _messages.ToolCallPart,
-        *args: Any,
-        **kwargs: Any,
+        *args: object,
+        **kwargs: object,
     ) -> _messages.ToolReturnPart | _messages.RetryPromptPart:
         from pprint import pprint
 
