@@ -15,7 +15,7 @@ class WrappedTool(PydanticTool[AgentDepsT]):
     async def run(
         self,
         message: _messages.ToolCallPart,
-        *args,
+        *args: any,
     ) -> _messages.ToolReturnPart | _messages.RetryPromptPart:
         from pprint import pprint
 
