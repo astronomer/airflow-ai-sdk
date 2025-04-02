@@ -71,7 +71,7 @@ def test_init(base_config, patched_agent_class, patched_super_init, mock_agent):
     assert operator.model == base_config["model"]
     assert operator.system_prompt == base_config["system_prompt"]
     assert operator.allow_multiple_branches is False
-    
+
     # Verify that AgentDecoratedOperator.__init__ was called with the mock agent
     patched_super_init.assert_called_once()
     args, kwargs = patched_super_init.call_args
@@ -94,7 +94,7 @@ def test_init_with_multiple_branches(base_config, patched_agent_class, patched_s
         op_kwargs=base_config["op_kwargs"],
         python_callable=lambda: "test",
     )
-    
+
     # Verify the allow_multiple_branches property was set
     assert operator.allow_multiple_branches is True
 
@@ -105,14 +105,14 @@ def test_execute_with_enum_result(base_config, mock_context, mock_agent):
         with patch("airflow_ai_sdk.operators.llm_branch.AgentDecoratedOperator.execute") as mock_super_execute:
             # Set up mock agent
             mock_agent_class.return_value = mock_agent
-            
+
             # Mock the result of super().execute
             task_id = "task2"
             mock_super_execute.return_value = task_id
-            
+
             # Mock the do_branch method to return a list of tasks
             mock_do_branch_result = ["task2"]
-            
+
             # Create the operator
             with patch("airflow_ai_sdk.operators.llm_branch.AgentDecoratedOperator"):
                 with patch.object(LLMBranchDecoratedOperator, "do_branch", return_value=mock_do_branch_result):
@@ -124,19 +124,19 @@ def test_execute_with_enum_result(base_config, mock_context, mock_agent):
                         op_kwargs=base_config["op_kwargs"],
                         python_callable=lambda: "test",
                     )
-                    
+
                     # Set downstream task IDs
                     operator.downstream_task_ids = ["task1", "task2", "task3"]
-                    
+
                     # Call execute
                     result = operator.execute(mock_context)
-                    
+
                     # Verify a new Agent was created with the correct enum result_type
                     assert mock_agent_class.call_count == 2  # Once in __init__ and once in execute
-                    
+
                     # Verify that super().execute was called
                     mock_super_execute.assert_called_once_with(mock_context)
-                    
+
                     # Verify the result
                     assert result == mock_do_branch_result
 
@@ -147,13 +147,13 @@ def test_execute_with_non_string_result(base_config, mock_context, mock_agent):
         with patch("airflow_ai_sdk.operators.llm_branch.AgentDecoratedOperator.execute") as mock_super_execute:
             # Set up mock agent
             mock_agent_class.return_value = mock_agent
-            
+
             # Mock the result of super().execute to return a non-string value
             mock_super_execute.return_value = 123
-            
+
             # Mock the do_branch method to return a list of tasks
             mock_do_branch_result = ["task1"]
-            
+
             # Create the operator
             with patch("airflow_ai_sdk.operators.llm_branch.AgentDecoratedOperator"):
                 with patch.object(LLMBranchDecoratedOperator, "do_branch", return_value=mock_do_branch_result) as mock_do_branch:
@@ -165,15 +165,15 @@ def test_execute_with_non_string_result(base_config, mock_context, mock_agent):
                         op_kwargs=base_config["op_kwargs"],
                         python_callable=lambda: "test",
                     )
-                    
+
                     # Set downstream task IDs
                     operator.downstream_task_ids = ["task1", "task2", "task3"]
-                    
+
                     # Call execute
                     result = operator.execute(mock_context)
-                    
+
                     # Verify that do_branch was called with the string representation
                     mock_do_branch.assert_called_once_with(mock_context, "123")
-                    
+
                     # Verify the result
                     assert result == mock_do_branch_result

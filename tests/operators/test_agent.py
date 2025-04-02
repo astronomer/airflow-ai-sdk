@@ -89,7 +89,7 @@ def test_execute_with_string_result(base_config, mock_context, mock_agent_no_too
     mock_result = MagicMock(spec=AgentRunResult)
     mock_result.data = "test_result"
     mock_agent_no_tools.run_sync.return_value = mock_result
-    
+
     # Create the operator
     operator = AgentDecoratedOperator(
         agent=mock_agent_no_tools,
@@ -98,10 +98,10 @@ def test_execute_with_string_result(base_config, mock_context, mock_agent_no_too
         op_args=base_config["op_args"],
         op_kwargs=base_config["op_kwargs"],
     )
-        
+
     # Call execute
     result = operator.execute(mock_context)
-        
+
     # Verify the result
     assert result == "test_result"
 
@@ -112,14 +112,14 @@ def test_execute_with_base_model_result(base_config, mock_context, mock_agent_no
     class TestModel(BaseModel):
         field1: str
         field2: int
-    
+
     test_model = TestModel(field1="test", field2=42)
-    
+
     # Mock the result of run_sync
     mock_result = MagicMock()
     mock_result.data = test_model
     mock_agent_no_tools.run_sync.return_value = mock_result
-    
+
     # Create the operator
     operator = AgentDecoratedOperator(
         agent=mock_agent_no_tools,
@@ -128,10 +128,10 @@ def test_execute_with_base_model_result(base_config, mock_context, mock_agent_no
         op_args=base_config["op_args"],
         op_kwargs=base_config["op_kwargs"],
         )
-        
+
     # Call execute
     result = operator.execute(mock_context)
-        
+
     # Verify the result
     assert result == {"field1": "test", "field2": 42}
 
@@ -141,7 +141,7 @@ def test_execute_with_error(base_config, mock_context, mock_agent_no_tools):
     # Configure the mock agent's run_sync to raise an exception
     error_message = "Test error"
     mock_agent_no_tools.run_sync.side_effect = ValueError(error_message)
-    
+
     # Create the operator
     operator = AgentDecoratedOperator(
         agent=mock_agent_no_tools,
@@ -150,10 +150,10 @@ def test_execute_with_error(base_config, mock_context, mock_agent_no_tools):
         op_args=base_config["op_args"],
         op_kwargs=base_config["op_kwargs"],
     )
-        
+
     # Call execute
     with pytest.raises(ValueError, match=error_message):
         operator.execute(mock_context)
-    
+
     # Verify that run_sync was called
     mock_agent_no_tools.run_sync.assert_called_once_with("test")
