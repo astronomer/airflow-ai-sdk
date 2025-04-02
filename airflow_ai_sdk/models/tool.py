@@ -3,7 +3,7 @@ Module that contains the AirflowTool class.
 """
 
 from pydantic_ai import Tool as PydanticTool
-from pydantic_ai.tools import AgentDepsT, RunContext, _messages, Tracer
+from pydantic_ai.tools import AgentDepsT, _messages
 
 
 class WrappedTool(PydanticTool[AgentDepsT]):
@@ -13,13 +13,15 @@ class WrappedTool(PydanticTool[AgentDepsT]):
     """
 
     async def run(
-        self, message: _messages.ToolCallPart, run_context: RunContext[AgentDepsT], tracer: Tracer
+        self,
+        message: _messages.ToolCallPart,
+        *args,
     ) -> _messages.ToolReturnPart | _messages.RetryPromptPart:
         from pprint import pprint
 
         print(f"::group::Calling tool {message.tool_name} with args {message.args}")
 
-        result = await super().run(message, run_context, tracer)
+        result = await super().run(message, *args)
         print("Result")
         pprint(result.content)
 
