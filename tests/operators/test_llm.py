@@ -111,7 +111,7 @@ def test_init_with_model_object(base_config, patched_agent_class, patched_super_
     """Test initialization with a Model object instead of a string."""
     # Create a mock model object
     mock_model = MagicMock(spec=Model)
-    
+
     # Create the operator
     operator = LLMDecoratedOperator(
         model=mock_model,
