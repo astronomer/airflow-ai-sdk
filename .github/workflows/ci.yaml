@@ -70,11 +70,11 @@ jobs:
       - name: install dependencies
         run: uv sync --all-extras --dev
 
-      - name: install setuptools
-        run: uv pip install setuptools
+      - name: install pydantic-ai-slim and airflow
+        run: uv add pydantic-ai-slim==${{ matrix.pydantic-ai-version }} apache-airflow==${{ matrix.airflow-version }}
 
       - name: pytest
-        run: uv run --with 'setuptools pydantic-ai-slim==${{ matrix.pydantic-ai-version }} apache-airflow==${{ matrix.airflow-version }}' pytest -v
+        run: uv run pytest -v
 
       - name: minimize uv cache
         run: uv cache prune --ci
