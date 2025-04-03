@@ -67,14 +67,11 @@ jobs:
       - name: install python
         run: uv python install ${{ matrix.python-version }}
 
-      - name: install specific pydantic-ai and airflow versions
-        run: uv pip install pydantic-ai-slim==${{ matrix.pydantic-ai-version }} apache-airflow==${{ matrix.airflow-version }}
-
       - name: install dependencies
         run: uv sync --all-extras --dev
 
       - name: pytest
-        run: uv run pytest -v
+        run: uv run --with 'pydantic-ai-slim==${{ matrix.pydantic-ai-version }}' --with 'apache-airflow==${{ matrix.airflow-version }}' pytest -v
 
       - name: minimize uv cache
         run: uv cache prune --ci
