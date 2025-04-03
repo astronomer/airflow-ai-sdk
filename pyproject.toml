@@ -7,7 +7,7 @@ name = "airflow-ai-sdk"
 dynamic = ["version"]
 description = "SDK for building LLM workflows and agents using Apache Airflow"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = [
     "apache-airflow>=2.7.0",
     "typing-extensions>=4.0.0",
@@ -48,7 +48,7 @@ line-length = 88
 indent-width = 4
 exclude = ["tests", "examples"]
 
-target-version = "py313"
+target-version = "py312"
 
 [tool.ruff.lint]
 select = [

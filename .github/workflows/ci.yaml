@@ -37,6 +37,13 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version:
+          - "3.10"
+          - "3.11"
+          - "3.12"
+
     steps:
       - uses: actions/checkout@v4
 
@@ -47,13 +54,13 @@ jobs:
           enable-cache: true
 
       - name: install python
-        run: uv python install
+        run: uv python install ${{ matrix.python-version }}
 
       - name: install dependencies
         run: uv sync --all-extras --dev
 
       - name: pytest
-        run: uv run pytest -v
+        run: uv run --python ${{ matrix.python-version }} pytest -v
 
       - name: minimize uv cache
         run: uv cache prune --ci
