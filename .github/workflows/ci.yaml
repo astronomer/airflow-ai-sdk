@@ -70,6 +70,9 @@ jobs:
       - name: install dependencies
         run: uv sync --all-extras --dev
 
+      - name: install setuptools
+        run: uv add setuptools
+
       - name: install pydantic-ai-slim and airflow
         run: uv add pydantic-ai-slim==${{ matrix.pydantic-ai-version }} apache-airflow==${{ matrix.airflow-version }}
 
