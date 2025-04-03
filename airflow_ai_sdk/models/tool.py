@@ -19,7 +19,7 @@ class WrappedTool(PydanticTool[AgentDepsT]):
         message: _messages.ToolCallPart,
         *args: object,
         **kwargs: object,
-    ) -> Union[_messages.ToolReturnPart, _messages.RetryPromptPart]:
+    ) -> _messages.ToolReturnPart | _messages.RetryPromptPart:
         from pprint import pprint
 
         print(f"::group::Calling tool {message.tool_name} with args {message.args}")

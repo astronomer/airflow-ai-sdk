@@ -7,7 +7,7 @@ name = "airflow-ai-sdk"
 dynamic = ["version"]
 description = "SDK for building LLM workflows and agents using Apache Airflow"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = [
     "apache-airflow>=2.7.0",
     "typing-extensions>=4.0.0",
@@ -68,10 +68,6 @@ select = [
     "I",    # Import order (isort) – ensure imports are sorted into groups (stdlib, third-party, local) for readability
     "UP",   # Python upgrades (pyupgrade) – suggest modern syntax (f-strings, walrus operator, etc.) for clean, up-to-date code
     "W293", # Avoid blank lines with whitespace
-]
-
-ignore = [
-    "UP007" # Don't change types from `Union[..., ...]` to `... | ...` because we support 3.9
 ]
 
 [tool.ruff.lint.flake8-annotations]
