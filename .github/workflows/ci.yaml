@@ -74,7 +74,7 @@ jobs:
         run: uv pip install setuptools
 
       - name: pytest
-        run: uv run --with 'setuptools' --with 'pydantic-ai-slim==${{ matrix.pydantic-ai-version }}' --with 'apache-airflow==${{ matrix.airflow-version }}' pytest -v
+        run: uv run --with 'setuptools pydantic-ai-slim==${{ matrix.pydantic-ai-version }} apache-airflow==${{ matrix.airflow-version }}' pytest -v
 
       - name: minimize uv cache
         run: uv cache prune --ci
