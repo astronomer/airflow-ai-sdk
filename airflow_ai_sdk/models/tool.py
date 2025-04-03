@@ -2,8 +2,6 @@
 Module that contains the AirflowTool class.
 """
 
-from typing import Union
-
 from pydantic_ai import Tool as PydanticTool
 from pydantic_ai.tools import AgentDepsT, _messages
 
