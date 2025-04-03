@@ -71,7 +71,7 @@ jobs:
         run: uv sync --all-extras --dev
 
       - name: pytest
-        run: uv run --with 'pydantic-ai-slim==${{ matrix.pydantic-ai-version }}' --with 'apache-airflow==${{ matrix.airflow-version }}' pytest -v
+        run: uv run --with 'pydantic-ai-slim==${{ matrix.pydantic-ai-version }}' --with 'apache-airflow==${{ matrix.airflow-version }}' --with 'distutils' pytest -v
 
       - name: minimize uv cache
         run: uv cache prune --ci
