@@ -70,6 +70,10 @@ select = [
     "W293", # Avoid blank lines with whitespace
 ]
 
+ignore = [
+    "UP007" # Don't change types from `Union[..., ...]` to `... | ...` because we support 3.9
+]
+
 [tool.ruff.lint.flake8-annotations]
 mypy-init-return = true      # Don't require `-> None` on __init__ (MyPy treats __init__ as implicitly returning None)
 ignore-fully-untyped = false # Even fully untyped functions are reported (ensure *every* function has type hints)

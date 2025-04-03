@@ -2,6 +2,8 @@
 Module that contains the AirflowTool class.
 """
 
+from typing import Union
+
 from pydantic_ai import Tool as PydanticTool
 from pydantic_ai.tools import AgentDepsT, _messages
 
@@ -17,7 +19,7 @@ class WrappedTool(PydanticTool[AgentDepsT]):
         message: _messages.ToolCallPart,
         *args: object,
         **kwargs: object,
-    ) -> _messages.ToolReturnPart | _messages.RetryPromptPart:
+    ) -> Union[_messages.ToolReturnPart, _messages.RetryPromptPart]:
         from pprint import pprint
 
         print(f"::group::Calling tool {message.tool_name} with args {message.args}")
