@@ -68,7 +68,7 @@ jobs:
         run: uv python install ${{ matrix.python-version }}
 
       - name: install setuptools
-        run: apt install -y python3-setuptools
+        run: sudo apt install -y python3-setuptools
 
       - name: install pydantic-ai-slim and airflow
         run: uv add pydantic-ai-slim==${{ matrix.pydantic-ai-version }} apache-airflow==${{ matrix.airflow-version }}
