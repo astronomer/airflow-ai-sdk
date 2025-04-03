@@ -37,6 +37,24 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version:
+          - "3.9"
+          - "3.10"
+          - "3.11"
+          - "3.12"
+        pydantic-ai-version:
+          # cherry pick a couple examples with big changes, only care about >= 0.0.40
+          - "0.0.40"
+          - "0.0.44"
+          - "0.0.49"
+        airflow-version:
+          # only care about >= 2.8
+          - "2.8"
+          - "2.9"
+          - "2.10"
+
     steps:
       - uses: actions/checkout@v4
 
@@ -47,7 +65,10 @@ jobs:
           enable-cache: true
 
       - name: install python
-        run: uv python install
+        run: uv python install ${{ matrix.python-version }}
+
+      - name: install specific pydantic-ai and airflow versions
+        run: uv pip install pydantic-ai-slim==${{ matrix.pydantic-ai-version }} apache-airflow==${{ matrix.airflow-version }}
 
       - name: install dependencies
         run: uv sync --all-extras --dev
