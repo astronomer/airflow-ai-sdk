@@ -4,10 +4,9 @@ Module that contains the AgentOperator class.
 
 from typing import Any
 
-from airflow.decorators.python import _PythonDecoratedOperator
-from airflow.utils.context import Context
 from pydantic_ai import Agent
 
+from airflow_ai_sdk.airflow import Context, _PythonDecoratedOperator
 from airflow_ai_sdk.models.base import BaseModel
 from airflow_ai_sdk.models.tool import WrappedTool
 

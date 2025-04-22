@@ -5,7 +5,10 @@ This shows how to use the SDK to build a simple product feedback summarization w
 from typing import Any, Literal
 
 import pendulum
-from airflow.decorators import dag, task
+try:
+    from airflow.sdk import dag, task
+except ImportError:
+    from airflow.decorators import dag, task
 from airflow.exceptions import AirflowSkipException
 
 import airflow_ai_sdk as ai_sdk
@@ -68,6 +71,3 @@ def product_feedback_summarization():
     upload_summaries(summaries)
 
 dag = product_feedback_summarization()
-
-if __name__ == "__main__":
-    dag.test()
