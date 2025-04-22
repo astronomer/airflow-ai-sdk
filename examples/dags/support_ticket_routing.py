@@ -3,7 +3,10 @@ Example DAG that routes support tickets to the correct department using the llm_
 """
 
 import pendulum
-from airflow.decorators import dag, task
+try:
+    from airflow.sdk import dag, task
+except ImportError:
+    from airflow.decorators import dag, task
 from airflow.models.dagrun import DagRun
 
 
@@ -80,6 +83,3 @@ def support_ticket_routing():
     handle_p3_ticket(ticket)
 
 dag = support_ticket_routing()
-
-if __name__ == "__main__":
-    dag.test(run_conf={"ticket": "Hi, our production deployment just went down because it ran out of memory. Please help."})

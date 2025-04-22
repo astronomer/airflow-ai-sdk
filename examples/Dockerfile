@@ -1,4 +1,4 @@
-FROM quay.io/astronomer/astro-runtime:12.7.1-base
+FROM astrocrpublic.azurecr.io/runtime:3.0-1-base
 
 USER root
 

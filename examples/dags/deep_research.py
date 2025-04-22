@@ -4,7 +4,10 @@ This shows how to use the SDK to build a deep research agent.
 
 import pendulum
 import requests
-from airflow.decorators import dag, task
+try:
+    from airflow.sdk import dag, task
+except ImportError:
+    from airflow.decorators import dag, task
 from airflow.models.dagrun import DagRun
 from airflow.models.param import Param
 from bs4 import BeautifulSoup
@@ -86,6 +89,3 @@ def deep_research():
     upload_results(results)
 
 dag = deep_research()
-
-if __name__ == "__main__":
-    dag.test(run_conf={"query": "How has the field of data engineering evolved in the last 5 years?"})

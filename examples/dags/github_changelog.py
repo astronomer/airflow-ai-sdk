@@ -5,7 +5,10 @@ This shows how to use the SDK to build a simple GitHub change summarization work
 import os
 
 import pendulum
-from airflow.decorators import dag, task
+try:
+    from airflow.sdk import dag, task
+except ImportError:
+    from airflow.decorators import dag, task
 from github import Github
 
 
@@ -68,6 +71,3 @@ def github_changelog():
     send_summaries(summaries)
 
 dag = github_changelog()
-
-if __name__ == "__main__":
-    dag.test()

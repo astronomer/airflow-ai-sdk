@@ -5,10 +5,9 @@ Module that contains the AgentOperator class.
 from enum import Enum
 from typing import Any
 
-from airflow.operators.branch import BranchMixIn
-from airflow.utils.context import Context
 from pydantic_ai import Agent, models
 
+from airflow_ai_sdk.airflow import BranchMixIn, Context
 from airflow_ai_sdk.operators.agent import AgentDecoratedOperator
 
 

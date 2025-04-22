@@ -3,7 +3,10 @@ This example consumes a list of prospects and generates personalized email messa
 """
 
 import pendulum
-from airflow.decorators import dag, task
+try:
+    from airflow.sdk import dag, task
+except ImportError:
+    from airflow.decorators import dag, task
 from airflow.exceptions import AirflowSkipException
 
 import airflow_ai_sdk as ai_sdk
@@ -254,7 +257,4 @@ def email_generation():
     emails = generate_email.expand(prospect=prospects)
     send_email.expand(email=emails)
 
-dag = email_generation()
-
-if __name__ == "__main__":
-    dag.test()
+my_dag = email_generation()

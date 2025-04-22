@@ -43,6 +43,9 @@ jobs:
           - "3.10"
           - "3.11"
           - "3.12"
+        airflow-version:
+          - "2.7.0"
+          - "3.0.0"
 
     steps:
       - uses: actions/checkout@v4
@@ -58,6 +61,9 @@ jobs:
 
       - name: install dependencies
         run: uv sync --all-extras --dev
+
+      - name: install airflow
+        run: uv run --python ${{ matrix.python-version }} pip install apache-airflow==${{ matrix.airflow-version }}
 
       - name: pytest
         run: uv run --python ${{ matrix.python-version }} pytest -v
