@@ -10,8 +10,8 @@ try:
     from airflow.sdk.definitions.context import Context
 except ImportError:
     # 2.x
-    from airflow.decorators.base import TaskDecorator, task_decorator_factory
-    from airflow.operators.python import BranchMixIn, _PythonDecoratedOperator
+    from airflow.decorators.base import TaskDecorator, task_decorator_factory, _PythonDecoratedOperator
+    from airflow.operators.python import BranchMixIn
     from airflow.utils.context import Context
 
 __all__ = [
