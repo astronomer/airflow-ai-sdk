@@ -12,9 +12,10 @@ except ImportError:
     # 2.x
     from airflow.decorators.base import (
         TaskDecorator,
+        _PythonDecoratedOperator,
         task_decorator_factory,
     )
-    from airflow.operators.python import BranchMixIn, _PythonDecoratedOperator
+    from airflow.operators.python import BranchMixIn
     from airflow.utils.context import Context
 
 __all__ = [
