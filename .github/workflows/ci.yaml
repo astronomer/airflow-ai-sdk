@@ -65,6 +65,12 @@ jobs:
       - name: install airflow
         run: uv run --python ${{ matrix.python-version }} pip install apache-airflow==${{ matrix.airflow-version }}
 
+      - name: print python package versions
+        run: uv run --python ${{ matrix.python-version }} python -m pip list
+
+      - name: print airflow version
+        run: uv run --python ${{ matrix.python-version }} airflow version
+
       - name: pytest
         run: uv run --python ${{ matrix.python-version }} pytest -v
 
