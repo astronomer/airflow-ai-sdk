@@ -63,7 +63,7 @@ jobs:
         run: uv sync --all-extras --dev
 
       - name: install airflow
-        run: uv run --python ${{ matrix.python-version }} pip install apache-airflow==${{ matrix.airflow-version }}
+        run: uv pip install --system apache-airflow==${{ matrix.airflow-version }}
 
       - name: print python package versions
         run: uv pip freeze
