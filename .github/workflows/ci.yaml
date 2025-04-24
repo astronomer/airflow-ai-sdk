@@ -44,7 +44,7 @@ jobs:
           - "3.11"
           - "3.12"
         airflow-version:
-          - "2.7.0"
+          - "2.10.0"
           - "3.0.0"
 
     steps:
@@ -60,10 +60,16 @@ jobs:
         run: uv python install ${{ matrix.python-version }}
 
       - name: install dependencies
-        run: uv sync --all-extras --dev
+        run: uv sync --all-extras --dev --no-install-package apache-airflow
 
       - name: install airflow
-        run: uv run --python ${{ matrix.python-version }} pip install apache-airflow==${{ matrix.airflow-version }}
+        run: uv add apache-airflow==${{ matrix.airflow-version }}
+
+      - name: print python package versions
+        run: uv pip freeze
+
+      - name: print airflow version
+        run: uv run --python ${{ matrix.python-version }} airflow version
 
       - name: pytest
         run: uv run --python ${{ matrix.python-version }} pytest -v
