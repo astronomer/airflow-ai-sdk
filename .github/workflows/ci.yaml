@@ -59,11 +59,11 @@ jobs:
       - name: install python
         run: uv python install ${{ matrix.python-version }}
 
-      - name: create constraints.txt file with airflow version
-        run: echo "apache-airflow==${{ matrix.airflow-version }}" > constraints.txt
-
       - name: install dependencies
-        run: uv sync --all-extras --dev --constraint constraints.txt
+        run: uv sync --all-extras --dev --no-install-package apache-airflow
+
+      - name: install airflow
+        run: uv add apache-airflow==${{ matrix.airflow-version }}
 
       - name: print python package versions
         run: uv pip freeze
