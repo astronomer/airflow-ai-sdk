@@ -39,6 +39,7 @@ bedrock = ["pydantic-ai-slim[bedrock]<0.1.0"]
 
 # tools
 duckduckgo = ["pydantic-ai-slim[duckduckgo]<0.1.0"]
+sentence_transformers = ["sentence-transformers>=4.1.0"]
 
 # mcp
 mcp = ["pydantic-ai-slim[mcp]<0.1.0"]
