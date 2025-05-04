@@ -4,11 +4,12 @@ This package contains the Airflow AI SDK.
 
 from typing import Any
 
-__version__ = "0.1.2"
+__version__ = "0.2.0"
 
 from airflow_ai_sdk.decorators.agent import agent
 from airflow_ai_sdk.decorators.branch import llm_branch
 from airflow_ai_sdk.decorators.llm import llm
+from airflow_ai_sdk.decorators.embed import embed
 from airflow_ai_sdk.models.base import BaseModel
 
 __all__ = ["agent", "llm", "llm_branch", "BaseModel"]
@@ -32,6 +33,10 @@ def get_provider_info() -> dict[str, Any]:
             {
                 "name": "llm_branch",
                 "class-name": "airflow_ai_sdk.decorators.branch.llm_branch",
+            },
+            {
+                "name": "embed",
+                "class-name": "airflow_ai_sdk.decorators.embed.embed",
             },
         ],
     }

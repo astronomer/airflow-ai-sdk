@@ -11,12 +11,14 @@ if TYPE_CHECKING:
     from airflow_ai_sdk.airflow import TaskDecorator
 
 
-def embed(text: str, model: str, **kwargs: dict[str, Any]) -> "TaskDecorator":
+def embed(
+    model_name: str = "all-MiniLM-L12-v2", **kwargs: dict[str, Any]
+) -> "TaskDecorator":
     """
-    Decorator to make agent calls.
+    Decorator to make embed some text.
     """
-    kwargs["text"] = text
-    kwargs["model"] = model
+    # kwargs["text"] = text
+    kwargs["model_name"] = model_name
     return task_decorator_factory(
         decorated_operator_class=EmbedDecoratedOperator,
         **kwargs,
