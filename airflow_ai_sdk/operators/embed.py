@@ -18,11 +18,11 @@ class EmbedDecoratedOperator(_PythonDecoratedOperator):
 
     def __init__(
         self,
-        op_args: Any,
-        op_kwargs: Any,
+        op_args: list[Any],
+        op_kwargs: dict[str, Any],
         model_name: str,
-        *args: Any,
-        **kwargs: Any,
+        *args: dict[str, Any],
+        **kwargs: dict[str, Any],
     ):
         super().__init__(*args, op_args=op_args, op_kwargs=op_kwargs, **kwargs)
 
