@@ -8,8 +8,8 @@ __version__ = "0.2.0"
 
 from airflow_ai_sdk.decorators.agent import agent
 from airflow_ai_sdk.decorators.branch import llm_branch
-from airflow_ai_sdk.decorators.llm import llm
 from airflow_ai_sdk.decorators.embed import embed
+from airflow_ai_sdk.decorators.llm import llm
 from airflow_ai_sdk.models.base import BaseModel
 
 __all__ = ["agent", "llm", "llm_branch", "BaseModel"]
