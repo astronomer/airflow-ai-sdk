@@ -15,6 +15,7 @@ def test_execute_returns_vector(mock_sentence_transformer, mock_super_execute):
 
     op = EmbedDecoratedOperator(
         task_id="embed_test",
+        python_callable=lambda: "test",
         op_args=None,
         op_kwargs=None,
         model_name="test-model",
@@ -32,6 +33,7 @@ def test_execute_returns_vector(mock_sentence_transformer, mock_super_execute):
 def test_execute_type_error_on_non_str(mock_super_execute):
     op = EmbedDecoratedOperator(
         task_id="embed_test",
+        python_callable=lambda: "test",
         op_args=None,
         op_kwargs=None,
         model_name="test-model",
