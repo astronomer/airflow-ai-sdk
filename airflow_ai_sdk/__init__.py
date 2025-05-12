@@ -4,7 +4,7 @@ This package contains the Airflow AI SDK.
 
 from typing import Any
 
-__version__ = "0.2.0"
+__version__ = "0.1.3"
 
 from airflow_ai_sdk.decorators.agent import agent
 from airflow_ai_sdk.decorators.branch import llm_branch

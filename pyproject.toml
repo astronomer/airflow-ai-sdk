@@ -25,7 +25,6 @@ dependencies = [
     "apache-airflow>=2.7.0",
     "typing-extensions>=4.0.0",
     "pydantic-ai-slim<0.1.0",
-    "sentence-transformers>=4.1.0",
 ]
 
 [project.optional-dependencies]

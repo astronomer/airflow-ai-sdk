@@ -12,12 +12,16 @@ if TYPE_CHECKING:
 
 
 def embed(
-    model_name: str = "all-MiniLM-L12-v2", **kwargs: dict[str, Any]
+    model_name: str = "all-MiniLM-L12-v2",
+    **kwargs: dict[str, Any],
 ) -> "TaskDecorator":
     """
-    Decorator to make embed some text.
+    Decorator to embed text using a SentenceTransformer model.
+
+    Args:
+        model_name: The name of the model to use for the embedding. Passed to the `SentenceTransformer` constructor.
+        **kwargs: Keyword arguments to pass to the `EmbedDecoratedOperator` constructor.
     """
-    # kwargs["text"] = text
     kwargs["model_name"] = model_name
     return task_decorator_factory(
         decorated_operator_class=EmbedDecoratedOperator,
