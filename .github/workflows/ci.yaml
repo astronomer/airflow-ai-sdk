@@ -60,10 +60,13 @@ jobs:
         run: uv python install ${{ matrix.python-version }}
 
       - name: install dependencies
-        run: uv sync --all-extras --dev --no-install-package apache-airflow sentence-transformers
+        run: uv sync --all-extras --dev --no-install-package apache-airflow
 
       - name: install airflow
         run: uv add apache-airflow==${{ matrix.airflow-version }}
+
+      - name: install requirements necessary for examples
+        run: uv pip install sentence-transformers
 
       - name: print python package versions
         run: uv pip freeze
