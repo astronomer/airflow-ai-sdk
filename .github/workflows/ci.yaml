@@ -65,6 +65,9 @@ jobs:
       - name: install airflow
         run: uv add apache-airflow==${{ matrix.airflow-version }}
 
+      - name: install requirements necessary for examples
+        run: uv add sentence-transformers
+
       - name: print python package versions
         run: uv pip freeze
 

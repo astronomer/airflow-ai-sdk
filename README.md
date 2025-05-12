@@ -12,7 +12,6 @@ astro dev start
 
 If you don't have the Astro CLI installed, run `brew install astro` (or see other options [here](https://www.astronomer.io/docs/astro/cli/install-cli)).
 
-
 If you already have Airflow running, you can also install the package with any optional dependencies you need:
 
 ```bash
@@ -30,6 +29,7 @@ Table of Contents:
   - [LLM calls with structured outputs using `@task.llm` (user feedback -> sentiment and feature requests)](#llm-calls-with-structured-outputs-using-taskllm-user-feedback---sentiment-and-feature-requests)
   - [Agent calls with `@task.agent` (deep research agent)](#agent-calls-with-taskagent-deep-research-agent)
   - [Changing dag control flow with `@task.llm_branch` (support ticket routing)](#changing-dag-control-flow-with-taskllmbranch-support-ticket-routing)
+  - [Creating embeddings with `@task.embed` (text to vector embeddings)](#creating-embeddings-with-taskembed-text-to-vector-embeddings)
 - [Future Work](#future-work)
 
 ## Features
@@ -39,6 +39,7 @@ Table of Contents:
 - **Automatic output parsing:** Use function type hints (including Pydantic models) to automatically parse and validate LLM outputs.
 - **Branching with `@task.llm_branch`:** Change the control flow of a DAG based on the output of an LLM.
 - **Model support:** Support for [all models in the Pydantic AI library](https://ai.pydantic.dev/models/) (OpenAI, Anthropic, Gemini, Ollama, Groq, Mistral, Cohere, Bedrock)
+- **Embedding tasks with `@task.embed`:** Create vector embeddings from text using sentence-transformers models.
 
 ## Design Principles
 
@@ -47,6 +48,7 @@ We follow the taskflow pattern of Airflow with three decorators:
 - `@task.llm`: Define a task that calls an LLM. Under the hood, this creates a Pydantic AI `Agent` with no tools.
 - `@task.agent`: Define a task that calls an agent. You can pass in a Pydantic AI `Agent` directly.
 - `@task.llm_branch`: Define a task that branches the control flow of a DAG based on the output of an LLM. Enforces that the LLM output is one of the downstream task_ids.
+- `@task.embed`: Define a task that embeds text using a sentence-transformers model.
 
 The function supplied to each decorator is a translation function that converts the Airflow task's input into the LLM's input. If you don't want to do any translation, you
 can just return the input unchanged.
@@ -376,4 +378,59 @@ def support_ticket_routing():
     handle_p3_ticket(ticket)
 
 support_ticket_routing()
+```
+
+### Creating embeddings with `@task.embed` (text to vector embeddings)
+
+This example shows how to use the `@task.embed` decorator to create vector embeddings from text. The embeddings can be used for semantic search, clustering, or other vector-based operations. Make sure to install the `sentence-transformers` package to use the embedding operator.
+
+See full example: [text_embedding.py](examples/dags/text_embedding.py)
+
+```python
+import pendulum
+
+from airflow.decorators import dag, task
+
+@task
+def get_texts() -> list[str]:
+    """
+    This task returns a list of texts to embed. In a real workflow, this
+    task would get the texts from a database or API.
+    """
+    return [
+        "The quick brown fox jumps over the lazy dog",
+        "A fast orange fox leaps over a sleepy canine",
+        "The weather is beautiful today",
+    ]
+
+@task.embed(
+    model_name="all-MiniLM-L12-v2",  # default model
+    encode_kwargs={"normalize_embeddings": True}  # optional kwargs for the encode method
+)
+def create_embeddings(text: str) -> list[float]:
+    """
+    This task creates embeddings for the given text. The decorator handles
+    the model initialization and encoding.
+    """
+    return text
+
+@task
+def store_embeddings(embeddings: list[list[float]]):
+    """
+    This task stores the embeddings. In a real workflow, this task would
+    store the embeddings in a vector database.
+    """
+    print(f"Storing {len(embeddings)} embeddings")
+
+@dag(
+    schedule=None,
+    start_date=pendulum.datetime(2025, 1, 1, tz="UTC"),
+    catchup=False,
+)
+def text_embedding():
+    texts = get_texts()
+    embeddings = create_embeddings.expand(text=texts)
+    store_embeddings(embeddings)
+
+text_embedding()
 ```
