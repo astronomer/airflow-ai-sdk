@@ -1,116 +1,126 @@
 ---
 version: '3'
-x-airflow-common:
-  &airflow-common
+
+x-airflow-common: &airflow-common
   image: airflow-ai-sdk
   build:
     context: ..
     dockerfile: examples/Dockerfile
   env_file: .env
-  environment:
-    &airflow-common-env
-    DB_BACKEND: postgres
+  networks:
+    - airflow
+  environment: &common-env-vars
+    AIRFLOW__API__BASE_URL: "http://localhost:8080"
+    AIRFLOW__API__PORT: 8080
+    AIRFLOW__API_AUTH__JWT_SECRET: "airflow-ai-sdk"
+    AIRFLOW__CORE__AUTH_MANAGER: airflow.api_fastapi.auth.managers.simple.simple_auth_manager.SimpleAuthManager
+    AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_ALL_ADMINS: "True"
+    AIRFLOW__CORE__EXECUTION_API_SERVER_URL: "http://api-server:8080/execution/"
     AIRFLOW__CORE__EXECUTOR: LocalExecutor
-    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:pg_password@postgres:5432/airflow
     AIRFLOW__CORE__FERNET_KEY: ''
     AIRFLOW__CORE__LOAD_EXAMPLES: "False"
-    AIRFLOW__WEBSERVER__EXPOSE_CONFIG: "True"
+    AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql://airflow:pg_password@postgres:5432/airflow
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql://airflow:pg_password@postgres:5432/airflow
+    AIRFLOW__SCHEDULER__STANDALONE_DAG_PROCESSOR: True
     AIRFLOW__WEBSERVER__SECRET_KEY: "airflow-ai-sdk"
-    AIRFLOW__SCHEDULER__DAG_DIR_LIST_INTERVAL: "5"
+    AIRFLOW__WEBSERVER__RBAC: "True"
+    AIRFLOW__WEBSERVER__EXPOSE_CONFIG: "True"
     ASTRONOMER_ENVIRONMENT: local
-    # AIRFLOW__CORE__ALLOWED_DESERIALIZATION_CLASSES: airflow\.*
     OPENLINEAGE_DISABLED: "True"
-    POSTGRES_HOST: postgres
-    POSTGRES_PORT: 5432
-    POSTGRES_USER: airflow
-    POSTGRES_PASSWORD: pg_password
-    POSTGRES_DB: airflow
-    POSTGRES_SCHEMA: public
   volumes:
     - ./dags:/usr/local/airflow/dags
-    - ./logs:/usr/local/airflow/logs
     - ./plugins:/usr/local/airflow/plugins
-  depends_on:
-    &airflow-common-depends-on
-    postgres:
-      condition: service_healthy
+    - ./include:/usr/local/airflow/include
+    - ./tests:/usr/local/airflow/tests
+    - airflow_logs:/usr/local/airflow/logs
+
+networks:
+  airflow:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+  airflow_logs:
+    driver: local
 
 services:
   postgres:
     image: postgres:13
+    restart: unless-stopped
+    networks:
+      - airflow
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: airflow
       POSTGRES_PASSWORD: pg_password
       POSTGRES_DB: airflow
-    command: postgres -c 'idle_in_transaction_session_timeout=60000'   # 1 minute timeout
-    volumes:
-      - postgres-db-volume:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "airflow"]
       interval: 5s
       retries: 5
-    restart: always
 
-  airflow-webserver:
+  db-migration:
     <<: *airflow-common
-    command: airflow webserver
-    ports:
-      - 8080:8080
-    healthcheck:
-      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
-      interval: 10s
-      timeout: 10s
-      retries: 5
-    restart: always
     depends_on:
-      <<: *airflow-common-depends-on
-      airflow-init:
-        condition: service_completed_successfully
+      - postgres
+    command:
+      - airflow
+      - db
+      - migrate
 
-  airflow-scheduler:
+  scheduler:
     <<: *airflow-common
-    command: airflow scheduler
+    depends_on:
+      - db-migration
+    command:
+      - airflow
+      - scheduler
+    restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", 'airflow jobs check --job-type SchedulerJob --hostname "$${HOSTNAME}"']
       interval: 10s
       timeout: 10s
       retries: 5
-    restart: always
-    depends_on:
-      <<: *airflow-common-depends-on
-      airflow-init:
-        condition: service_completed_successfully
 
-  airflow-triggerer:
+  dag-processor:
     <<: *airflow-common
-    command: airflow triggerer
+    depends_on:
+      - db-migration
+    command:
+      - airflow
+      - dag-processor
+    restart: unless-stopped
+
+  api-server:
+    <<: *airflow-common
+    depends_on:
+      - db-migration
+    command:
+      - airflow
+      - api-server
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  triggerer:
+    <<: *airflow-common
+    depends_on:
+      - db-migration
+    command:
+      - airflow
+      - triggerer
+    restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", 'airflow jobs check --job-type TriggererJob --hostname "$${HOSTNAME}"']
       interval: 10s
       timeout: 10s
       retries: 5
-    restart: always
-    depends_on:
-      <<: *airflow-common-depends-on
-      airflow-init:
-        condition: service_completed_successfully
-
-  airflow-init:
-    <<: *airflow-common
-    entrypoint: /bin/bash
-    # yamllint disable rule:line-length
-    command:
-      - -c
-      - |
-        exec /entrypoint bash -c "
-          airflow db upgrade && \
-          airflow users create -r Admin -u admin -e admin -f admin -l admin -p admin && \
-          airflow version"
-    # yamllint enable rule:line-length
-    environment:
-      <<: *airflow-common-env
-
-volumes:
-  postgres-db-volume:
