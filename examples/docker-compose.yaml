@@ -27,6 +27,7 @@ x-airflow-common: &airflow-common
     AIRFLOW__WEBSERVER__EXPOSE_CONFIG: "True"
     ASTRONOMER_ENVIRONMENT: local
     OPENLINEAGE_DISABLED: "True"
+    AIRFLOW__SCHEDULER__ENABLE_HEALTH_CHECK: 'true'
   volumes:
     - ./dags:/usr/local/airflow/dags
     - ./plugins:/usr/local/airflow/plugins
@@ -60,8 +61,9 @@ services:
       POSTGRES_DB: airflow
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "airflow"]
-      interval: 5s
+      interval: 10s
       retries: 5
+      start_period: 5s
 
   db-migration:
     <<: *airflow-common
@@ -81,10 +83,11 @@ services:
       - scheduler
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", 'airflow jobs check --job-type SchedulerJob --hostname "$${HOSTNAME}"']
-      interval: 10s
+      test: ["CMD", "curl", "--fail", "http://localhost:8974/health"]
+      interval: 30s
       timeout: 10s
       retries: 5
+      start_period: 30s
 
   dag-processor:
     <<: *airflow-common
@@ -94,6 +97,12 @@ services:
       - airflow
       - dag-processor
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", 'airflow jobs check --job-type DagProcessorJob --hostname "$${HOSTNAME}"']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
 
   api-server:
     <<: *airflow-common
@@ -106,10 +115,11 @@ services:
     ports:
       - "8080:8080"
     healthcheck:
-      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
-      interval: 10s
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/api/v2/version"]
+      interval: 30s
       timeout: 10s
       retries: 5
+      start_period: 30s
 
   triggerer:
     <<: *airflow-common
@@ -121,6 +131,7 @@ services:
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", 'airflow jobs check --job-type TriggererJob --hostname "$${HOSTNAME}"']
-      interval: 10s
+      interval: 30s
       timeout: 10s
       retries: 5
+      start_period: 30s
