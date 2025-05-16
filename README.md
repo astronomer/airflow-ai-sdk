@@ -1,11 +1,13 @@
 # airflow-ai-sdk
 
-A Python SDK for working with LLMs from Apache Airflow, based on [Pydantic AI](https://ai.pydantic.dev). It allows users to call LLMs and orchestrate agent calls directly within their Airflow pipelines using decorator-based tasks.
+A Python SDK for working with LLMs from [Apache Airflow](https://github.com/apache/airflow). It allows users to call LLMs and orchestrate agent calls directly within their Airflow pipelines using decorator-based tasks.
+
+We find it's often helpful to rely on mature orchestration tooling like Airflow for instrumenting LLM workflows and agents in production, as these LLM workflows follow the same form factor as more traditional workflows like ETL pipelines, operational processes, and ML workflows.
 
 ## Quick Start
 
 ```bash
-pip install airflow-ai-sdk[openai,duckduckgo]
+pip install airflow-ai-sdk[openai]
 ```
 
 Installing with no optional dependencies will give you the slim version of the package. The available optional dependencies are listed in [pyproject.toml](https://github.com/astronomer/airflow-ai-sdk/blob/main/pyproject.toml#L17).
@@ -22,22 +24,35 @@ Installing with no optional dependencies will give you the slim version of the p
 ## Example
 
 ```python
+from typing import Literal
 from airflow.decorators import dag, task
 import pendulum
+from airflow.models.dagrun import DagRun
+
 
 @task.llm(
     model="gpt-4o-mini",
-    result_type=str,
-    system_prompt="You are a helpful assistant."
+    result_type=Literal["positive", "negative", "neutral"],
+    system_prompt="Classify the sentiment of the given text.",
 )
-def process_with_llm(input_text: str) -> str:
+def process_with_llm(dag_run: DagRun) -> str:
+    input_text = dag_run.conf.get("input_text")
+
+    # can do pre-processing here (e.g. PII redaction)
     return input_text
 
-@dag(schedule=None, start_date=pendulum.datetime(2025, 1, 1), catchup=False)
-def simple_llm_dag():
-    result = process_with_llm("Summarize the benefits of using Airflow with LLMs.")
 
-simple_llm_dag()
+@dag(
+    schedule=None,
+    start_date=pendulum.datetime(2025, 1, 1),
+    catchup=False,
+    params={"input_text": "I'm very happy with the product."},
+)
+def sentiment_classification():
+    process_with_llm()
+
+
+sentiment_classification()
 ```
 
 ## Examples Repository
