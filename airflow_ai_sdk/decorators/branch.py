@@ -19,8 +19,16 @@ def llm_branch(
     allow_multiple_branches: bool = False,
     **kwargs: dict[str, Any],
 ) -> "TaskDecorator":
-    """
-    Decorator to make LLM calls and branch the execution of a DAG based on the result.
+    """Decorator to branch a DAG based on the result of an LLM call.
+
+    Example:
+        ```python
+        import airflow_ai_sdk as ai_sdk
+
+        @ai_sdk.llm_branch(model="o3-mini", system_prompt="Return 'a' or 'b'")
+        def decide() -> str:
+            return "Which path?"
+        ```
     """
     kwargs["model"] = model
     kwargs["system_prompt"] = system_prompt
