@@ -20,6 +20,9 @@ def document_module(module: ModuleType, file: TextIO) -> None:
         if name.startswith("_"):
             continue
         if inspect.isfunction(obj) or inspect.isclass(obj):
+            obj_module = getattr(obj, "__module__", module.__name__)
+            if obj_module != module.__name__:
+                continue
             file.write(f"## {name}\n\n")
             doc = inspect.getdoc(obj) or "No documentation."
             file.write(doc)
