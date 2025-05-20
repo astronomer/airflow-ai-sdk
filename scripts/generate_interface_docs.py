@@ -35,8 +35,11 @@ def main() -> None:
             continue
         module_name = path.with_suffix("").as_posix().replace("/", ".")
         module = importlib.import_module(module_name)
-        out_file = DOCS_DIR / f"{module_name.replace('.', '_')}.md"
-        with out_file.open("w") as f:
+
+        out_path = DOCS_DIR / path.relative_to(PACKAGE).with_suffix(".md")
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+
+        with out_path.open("w") as f:
             document_module(module, f)
 
 
