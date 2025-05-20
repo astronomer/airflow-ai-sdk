@@ -2,10 +2,6 @@
 
 Module that contains the AirflowTool class.
 
-## PydanticTool
-
-A tool function for an agent.
-
 ## WrappedTool
 
 Wrapper around the pydantic_ai.Tool class that prints the tool call and the result
