@@ -4,5 +4,18 @@ Module that contains the AgentOperator class.
 
 ## LLMBranchDecoratedOperator
 
-A decorator that branches the execution of a DAG based on the result of an LLM call.
+Branch a DAG based on the result of an LLM call.
+
+Example:
+    >>> from airflow_ai_sdk.operators.llm_branch import LLMBranchDecoratedOperator
+
+    >>> def make_prompt() -> str:
+    ...     return "Choose"
+
+    >>> operator = LLMBranchDecoratedOperator(
+    ...     task_id="branch",
+    ...     python_callable=make_prompt,
+    ...     model="o3-mini",
+    ...     system_prompt="Return 'a' or 'b'",
+    ... )
 

@@ -4,6 +4,18 @@ Module that contains the AgentOperator class.
 
 ## LLMDecoratedOperator
 
-Provides an abstraction on top of the Agent class. Not as powerful as the Agent class, but
-provides a simpler interface.
+Simpler interface for performing a single LLM call.
+
+Example:
+    >>> from airflow_ai_sdk.operators.llm import LLMDecoratedOperator
+
+    >>> def make_prompt() -> str:
+    ...     return "Hello"
+
+    >>> operator = LLMDecoratedOperator(
+    ...     task_id="llm",
+    ...     python_callable=make_prompt,
+    ...     model="o3-mini",
+    ...     system_prompt="Reply politely",
+    ... )
 
