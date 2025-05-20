@@ -11,9 +11,22 @@ from airflow_ai_sdk.operators.agent import AgentDecoratedOperator
 
 
 class LLMDecoratedOperator(AgentDecoratedOperator):
-    """
-    Provides an abstraction on top of the Agent class. Not as powerful as the Agent class, but
-    provides a simpler interface.
+    """Simpler interface for performing a single LLM call.
+
+    Example:
+        ```python
+        from airflow_ai_sdk.operators.llm import LLMDecoratedOperator
+
+        def make_prompt() -> str:
+            return "Hello"
+
+        operator = LLMDecoratedOperator(
+            task_id="llm",
+            python_callable=make_prompt,
+            model="o3-mini",
+            system_prompt="Reply politely",
+        )
+        ```
     """
 
     custom_operator_name = "@task.llm"
