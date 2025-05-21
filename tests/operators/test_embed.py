@@ -84,7 +84,7 @@ def test_execute_raises_error_on_non_str(mock_super_execute):
         model_name="test-model",
     )
 
-    with pytest.raises(ValueError) as excinfo:
+    with pytest.raises(TypeError) as excinfo:
         op.execute(context=None)
 
     msg = str(excinfo.value)
@@ -246,7 +246,7 @@ def test_non_string_input_types(mock_sentence_transformer, mock_super_execute):
         mock_super_execute.reset_mock()
         mock_super_execute.return_value = input_val
 
-        with pytest.raises(ValueError) as excinfo:
+        with pytest.raises(TypeError) as excinfo:
             op.execute(context=None)
 
         error_msg = str(excinfo.value)
