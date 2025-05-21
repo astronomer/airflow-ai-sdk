@@ -94,6 +94,9 @@ jobs:
       - name: install python
         run: uv python install
 
+      - name: install pre-commit
+        run: uv add pre-commit
+
       - name: install dependencies
         run: uv sync --all-extras --dev
 
@@ -104,7 +107,7 @@ jobs:
       - name: check for changes to the docs
         run: |
           if git diff --name-only | grep -q "docs"; then
-            echo "Changes to docs detected. Please run 'uv run python scripts/generate_interface_docs.py' to update the generated docs."
+            echo "Changes to docs detected. Please run 'uv run scripts/generate_interface_docs.py' to update the generated docs."
             exit 1
           else
             echo "No changes to docs detected"
