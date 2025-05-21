@@ -81,5 +81,8 @@ class EmbedDecoratedOperator(_PythonDecoratedOperator):
         from sentence_transformers import SentenceTransformer
 
         text = super().execute(context)
+        if not isinstance(text, str):
+            raise ValueError("The input text must be a string.")
+
         model = SentenceTransformer(self.model_name)
         return model.encode(text, **self.encode_kwargs).tolist()

@@ -42,7 +42,7 @@ class LLMDecoratedOperator(AgentDecoratedOperator):
         self,
         model: models.Model | models.KnownModelName,
         system_prompt: str,
-        result_type: type[BaseModel] | None = None,
+        result_type: type[BaseModel] = str,
         **kwargs: dict[str, Any],
     ):
         """
@@ -60,16 +60,3 @@ class LLMDecoratedOperator(AgentDecoratedOperator):
             result_type=result_type,
         )
         super().__init__(agent=agent, **kwargs)
-
-    def execute(self, context: Context) -> str | dict[str, Any]:
-        """
-        Execute the LLM call with the given context.
-
-        Args:
-            context: The Airflow context for this task execution.
-
-        Returns:
-            The result of the LLM call, which can be a string or a dictionary
-            if result_type is specified.
-        """
-        return super().execute(context)

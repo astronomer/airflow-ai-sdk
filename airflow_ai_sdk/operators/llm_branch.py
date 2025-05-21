@@ -88,9 +88,18 @@ class LLMBranchDecoratedOperator(AgentDecoratedOperator, BranchMixIn):
         )
 
         result = super().execute(context)
+
+        # turn the result into a string
+        if isinstance(result, Enum):
+            result = result.value
+
+        # if the response is not a string, cast it to a string
+        if not isinstance(result, str):
+            result = str(result)
+
         if isinstance(result, list) and not self.allow_multiple_branches:
             raise ValueError(
                 "Multiple branches were returned but allow_multiple_branches is False"
             )
 
-        return result
+        return self.do_branch(context, result)

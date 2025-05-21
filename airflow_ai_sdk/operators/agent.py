@@ -79,7 +79,7 @@ class AgentDecoratedOperator(_PythonDecoratedOperator):
             The result of the agent's execution, which can be a string, dictionary,
             or list of strings.
         """
-        print("Executing L")
+        print("Executing LLM call")
 
         prompt = super().execute(context)
         print(f"Prompt: {prompt}")
