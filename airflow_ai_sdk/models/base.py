@@ -1,6 +1,6 @@
 """
-This module contains a base class for all models. We need this because
-Airflow requires explicit serialization of all task inputs and outputs.
+This module provides a base class for all models in the SDK. The base class ensures
+proper serialization of task inputs and outputs as required by Airflow.
 """
 
 from pydantic import BaseModel as PydanticBaseModel
@@ -8,5 +8,19 @@ from pydantic import BaseModel as PydanticBaseModel
 
 class BaseModel(PydanticBaseModel):
     """
-    Base class for all models. Mostly reserving this for future use.
+    Base class for all models in the SDK.
+
+    This class extends Pydantic's BaseModel to provide a common foundation for all
+    models used in the SDK. It ensures proper serialization of task inputs and outputs
+    as required by Airflow.
+
+    Example:
+
+    ```python
+    from airflow_ai_sdk.models.base import BaseModel
+
+    class MyModel(BaseModel):
+        name: str
+        value: int
+    ```
     """

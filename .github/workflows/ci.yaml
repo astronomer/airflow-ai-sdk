@@ -100,5 +100,15 @@ jobs:
       - name: generate interface docs
         run: uv run python scripts/generate_interface_docs.py
 
+      # if there are changes to the docs, fail and tell the user to run the script
+      - name: check for changes to the docs
+        run: |
+          if git diff --name-only | grep -q "docs"; then
+            echo "Changes to docs detected. Please run `uv run python scripts/generate_interface_docs.py` to update the generated docs."
+            exit 1
+          else
+            echo "No changes to docs detected"
+          fi
+
       - name: minimize uv cache
         run: uv cache prune --ci

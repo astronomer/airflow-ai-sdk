@@ -1,5 +1,6 @@
 """
-Module that contains the AgentOperator class.
+This module provides the AgentDecoratedOperator class for executing pydantic_ai.Agent
+instances within Airflow tasks.
 """
 
 from typing import Any
@@ -12,24 +13,27 @@ from airflow_ai_sdk.models.tool import WrappedTool
 
 
 class AgentDecoratedOperator(_PythonDecoratedOperator):
-    """Operator that executes a :class:`pydantic_ai.Agent`.
+    """
+    Operator that executes a `pydantic_ai.Agent`.
+
+    This operator wraps a `pydantic_ai.Agent` instance and executes it within an Airflow task.
+    It provides enhanced logging capabilities through `WrappedTool`.
 
     Example:
-        ```python
-        from pydantic_ai import Agent
-        from airflow_ai_sdk.operators.agent import AgentDecoratedOperator
 
-        def prompt() -> str:
-            return "Hello"
+    ```python
+    from pydantic_ai import Agent
+    from airflow_ai_sdk.operators.agent import AgentDecoratedOperator
 
-        operator = AgentDecoratedOperator(
-            task_id="example",
-            python_callable=prompt,
-            agent=Agent(model="o3-mini", system_prompt="Say hello"),
-            op_args=[],
-            op_kwargs={},
-        )
-        ```
+    def prompt() -> str:
+        return "Hello"
+
+    operator = AgentDecoratedOperator(
+        task_id="example",
+        python_callable=prompt,
+        agent=Agent(model="o3-mini", system_prompt="Say hello"),
+    )
+    ```
     """
 
     custom_operator_name = "@task.agent"
@@ -42,6 +46,16 @@ class AgentDecoratedOperator(_PythonDecoratedOperator):
         *args: dict[str, Any],
         **kwargs: dict[str, Any],
     ):
+        """
+        Initialize the AgentDecoratedOperator.
+
+        Args:
+            agent: The `pydantic_ai.Agent` instance to execute.
+            op_args: Positional arguments to pass to the `python_callable`.
+            op_kwargs: Keyword arguments to pass to the `python_callable`.
+            *args: Additional positional arguments for the operator.
+            **kwargs: Additional keyword arguments for the operator.
+        """
         super().__init__(*args, op_args=op_args, op_kwargs=op_kwargs, **kwargs)
 
         self.op_args = op_args
@@ -55,7 +69,17 @@ class AgentDecoratedOperator(_PythonDecoratedOperator):
         }
 
     def execute(self, context: Context) -> str | dict[str, Any] | list[str]:
-        print("Executing LLM call")
+        """
+        Execute the agent with the given context.
+
+        Args:
+            context: The Airflow context for this task execution.
+
+        Returns:
+            The result of the agent's execution, which can be a string, dictionary,
+            or list of strings.
+        """
+        print("Executing L")
 
         prompt = super().execute(context)
         print(f"Prompt: {prompt}")
