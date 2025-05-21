@@ -8,18 +8,14 @@ Decorator to embed text using a SentenceTransformer model.
 
 Args:
     model_name: The name of the model to use for the embedding. Passed to
-        the ``SentenceTransformer`` constructor.
-    **kwargs: Keyword arguments to pass to the ``EmbedDecoratedOperator``
+        the `SentenceTransformer` constructor.
+    **kwargs: Keyword arguments to pass to the `EmbedDecoratedOperator`
         constructor.
 
 Example:
-    ```python
-    from airflow.decorators import task
-    import airflow_ai_sdk as ai_sdk
 
-    @task
-    @ai_sdk.embed()
-    def vectorize() -> str:
-        return "Example text"
-    ```
-
+```python
+@task.embed()
+def vectorize() -> str:
+    return "Example text"
+```

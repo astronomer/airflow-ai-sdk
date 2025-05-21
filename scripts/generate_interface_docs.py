@@ -7,6 +7,7 @@ DOCS_DIR = Path("docs/interface")
 DOCS_DIR.mkdir(parents=True, exist_ok=True)
 
 
+import subprocess
 from types import ModuleType
 from typing import TextIO
 
@@ -41,6 +42,9 @@ def main() -> None:
 
         with out_path.open("w") as f:
             document_module(module, f)
+
+    # run pre-commit hooks
+    subprocess.run(["pre-commit", "run", "--all-files"])  # noqa: S603 S607
 
 
 if __name__ == "__main__":

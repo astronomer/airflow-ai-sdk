@@ -1,24 +1,26 @@
 # airflow_ai_sdk.operators.embed
 
-Module that contains the EmbedOperator class.
+This module provides the EmbedDecoratedOperator class for generating text embeddings
+using SentenceTransformer models within Airflow tasks.
 
 ## EmbedDecoratedOperator
 
-Operator that builds embeddings for text.
+Operator that builds embeddings for text using SentenceTransformer models.
+
+This operator generates embeddings for text input using a specified SentenceTransformer
+model. It provides a convenient way to create embeddings within Airflow tasks.
 
 Example:
-    ```python
-    from airflow_ai_sdk.operators.embed import EmbedDecoratedOperator
 
-    def produce_text() -> str:
-        return "document"
+```python
+from airflow_ai_sdk.operators.embed import EmbedDecoratedOperator
 
-    operator = EmbedDecoratedOperator(
-        task_id="embed",
-        python_callable=produce_text,
-        op_args=[],
-        op_kwargs={},
-        model_name="all-MiniLM-L12-v2",
-    )
-    ```
+def produce_text() -> str:
+    return "document"
 
+operator = EmbedDecoratedOperator(
+    task_id="embed",
+    python_callable=produce_text,
+    model_name="all-MiniLM-L12-v2",
+)
+```

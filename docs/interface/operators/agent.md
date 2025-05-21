@@ -1,25 +1,27 @@
 # airflow_ai_sdk.operators.agent
 
-Module that contains the AgentOperator class.
+This module provides the AgentDecoratedOperator class for executing pydantic_ai.Agent
+instances within Airflow tasks.
 
 ## AgentDecoratedOperator
 
-Operator that executes a :class:`pydantic_ai.Agent`.
+Operator that executes a `pydantic_ai.Agent`.
+
+This operator wraps a `pydantic_ai.Agent` instance and executes it within an Airflow task.
+It provides enhanced logging capabilities through `WrappedTool`.
 
 Example:
-    ```python
-    from pydantic_ai import Agent
-    from airflow_ai_sdk.operators.agent import AgentDecoratedOperator
 
-    def prompt() -> str:
-        return "Hello"
+```python
+from pydantic_ai import Agent
+from airflow_ai_sdk.operators.agent import AgentDecoratedOperator
 
-    operator = AgentDecoratedOperator(
-        task_id="example",
-        python_callable=prompt,
-        agent=Agent(model="o3-mini", system_prompt="Say hello"),
-        op_args=[],
-        op_kwargs={},
-    )
-    ```
+def prompt() -> str:
+    return "Hello"
 
+operator = AgentDecoratedOperator(
+    task_id="example",
+    python_callable=prompt,
+    agent=Agent(model="o3-mini", system_prompt="Say hello"),
+)
+```
