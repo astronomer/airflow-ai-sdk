@@ -15,7 +15,19 @@ if TYPE_CHECKING:
 
 def agent(agent: Agent, **kwargs: dict[str, Any]) -> "TaskDecorator":
     """
-    Decorator to make agent calls.
+    Decorator to execute an `pydantic_ai.Agent` inside an Airflow task.
+
+    Example:
+
+    ```python
+    from pydantic_ai import Agent
+
+    my_agent = Agent(model="o3-mini", system_prompt="Say hello")
+
+    @task.agent(my_agent)
+    def greet(name: str) -> str:
+        return name
+    ```
     """
     kwargs["agent"] = agent
     return task_decorator_factory(

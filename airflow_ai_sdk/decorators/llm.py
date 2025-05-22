@@ -21,7 +21,15 @@ def llm(
     **kwargs: dict[str, Any],
 ) -> "TaskDecorator":
     """
-    Decorator to make LLM calls.
+    Decorator to make a single call to an LLM.
+
+    Example:
+
+    ```python
+    @task.llm(model="o3-mini", system_prompt="Translate to French")
+    def translate(text: str) -> str:
+        return text
+    ```
     """
     kwargs["model"] = model
     kwargs["result_type"] = result_type

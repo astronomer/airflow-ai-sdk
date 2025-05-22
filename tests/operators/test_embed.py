@@ -73,7 +73,7 @@ def test_execute_with_encode_kwargs(mock_sentence_transformer, mock_super_execut
     assert mock_model.last_encode_kwargs == encode_kwargs
 
 @patch.object(_PythonDecoratedOperator, "execute", autospec=True)
-def test_execute_type_error_on_non_str(mock_super_execute):
+def test_execute_raises_error_on_non_str(mock_super_execute):
     mock_super_execute.return_value = 12345
 
     op = EmbedDecoratedOperator(

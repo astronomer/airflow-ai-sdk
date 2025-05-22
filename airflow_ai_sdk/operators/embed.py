@@ -1,5 +1,6 @@
 """
-Module that contains the EmbedOperator class.
+This module provides the EmbedDecoratedOperator class for generating text embeddings
+using SentenceTransformer models within Airflow tasks.
 """
 
 from typing import Any
@@ -9,7 +10,25 @@ from airflow_ai_sdk.airflow import Context, _PythonDecoratedOperator
 
 class EmbedDecoratedOperator(_PythonDecoratedOperator):
     """
-    Operator that builds embeddings for some text.
+    Operator that builds embeddings for text using SentenceTransformer models.
+
+    This operator generates embeddings for text input using a specified SentenceTransformer
+    model. It provides a convenient way to create embeddings within Airflow tasks.
+
+    Example:
+
+    ```python
+    from airflow_ai_sdk.operators.embed import EmbedDecoratedOperator
+
+    def produce_text() -> str:
+        return "document"
+
+    operator = EmbedDecoratedOperator(
+        task_id="embed",
+        python_callable=produce_text,
+        model_name="all-MiniLM-L12-v2",
+    )
+    ```
     """
 
     custom_operator_name = "@task.embed"
@@ -24,9 +43,15 @@ class EmbedDecoratedOperator(_PythonDecoratedOperator):
         **kwargs: dict[str, Any],
     ):
         """
+        Initialize the EmbedDecoratedOperator.
+
         Args:
+            op_args: Positional arguments to pass to the python_callable.
+            op_kwargs: Keyword arguments to pass to the python_callable.
             model_name: The name of the model to use for the embedding. Passed to the `SentenceTransformer` constructor.
             encode_kwargs: Keyword arguments to pass to the `encode` method of the SentenceTransformer model.
+            *args: Additional positional arguments for the operator.
+            **kwargs: Additional keyword arguments for the operator.
         """
         if encode_kwargs is None:
             encode_kwargs = {}
@@ -44,17 +69,20 @@ class EmbedDecoratedOperator(_PythonDecoratedOperator):
             ) from e
 
     def execute(self, context: Context) -> list[float]:
-        print("Executing embedding")
+        """
+        Execute the embedding operation with the given context.
+
+        Args:
+            context: The Airflow context for this task execution.
+
+        Returns:
+            A list of floats representing the embedding vector for the input text.
+        """
+        from sentence_transformers import SentenceTransformer
+
         text = super().execute(context)
         if not isinstance(text, str):
-            raise TypeError("Attribute `text` must be of type `str`")
-        try:
-            from sentence_transformers import SentenceTransformer
+            raise TypeError("The input text must be a string.")
 
-            model = SentenceTransformer(self.model_name)
-            embedding = model.encode(text, **self.encode_kwargs)
-        except Exception as e:
-            print(f"Error: {e}")
-            raise e
-
-        return embedding.tolist()
+        model = SentenceTransformer(self.model_name)
+        return model.encode(text, **self.encode_kwargs).tolist()

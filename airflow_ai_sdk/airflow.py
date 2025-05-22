@@ -1,5 +1,6 @@
 """
-This contains any imports we need to make to support both Airflow 2.x and 3.x.
+This module provides compatibility layer for Airflow 2.x and 3.x by importing the necessary
+decorators, operators, and context utilities from the appropriate Airflow version.
 """
 
 try:

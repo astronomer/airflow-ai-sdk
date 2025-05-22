@@ -1,5 +1,5 @@
 """
-This package contains the Airflow AI SDK.
+This package provides an SDK for building LLM workflows and agents using Apache Airflow.
 """
 
 from typing import Any
@@ -16,6 +16,11 @@ __all__ = ["agent", "llm", "llm_branch", "BaseModel"]
 
 
 def get_provider_info() -> dict[str, Any]:
+    """Get provider information for Airflow.
+
+    Returns:
+        A dictionary containing package information and task decorators.
+    """
     return {
         "package-name": "airflow-ai-sdk",
         "name": "Airflow AI SDK",
