@@ -25,8 +25,8 @@ Installing with no optional dependencies will give you the slim version of the p
 
 ```python
 from typing import Literal
-from airflow.decorators import dag, task
 import pendulum
+from airflow.decorators import dag, task
 from airflow.models.dagrun import DagRun
 
 
