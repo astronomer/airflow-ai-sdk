@@ -6,15 +6,15 @@ the airflow-ai-sdk works with multiple versions.
 """
 
 try:
-    # Try the new location first (pydantic-ai >= 0.0.14)
-    from pydantic_ai._utils import _messages
+    # Try importing from the messages module (current pydantic-ai structure)
+    from pydantic_ai import messages as _messages
 except ImportError:
     try:
-        # Fall back to the old location (pydantic-ai < 0.0.14)
+        # Fall back to the old location (older pydantic-ai versions)
         from pydantic_ai.tools import _messages
     except ImportError as e:
         raise ImportError(
-            "Could not import _messages from pydantic_ai. "
+            "Could not import messages from pydantic_ai. "
             "Please ensure you have a compatible version of pydantic-ai installed."
         ) from e
 
