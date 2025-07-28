@@ -91,7 +91,7 @@ def test_execute_with_string_result(base_config, mock_context, mock_agent_no_too
     """Test execute method with a string result."""
     # Mock the result of run_sync
     mock_result = MagicMock(spec=AgentRunResult)
-    mock_result.data = "test_result"
+    mock_result.output = "test_result"
     mock_agent_no_tools.run_sync.return_value = mock_result
 
     # Create the operator
@@ -121,7 +121,7 @@ def test_execute_with_base_model_result(base_config, mock_context, mock_agent_no
 
     # Mock the result of run_sync
     mock_result = MagicMock()
-    mock_result.data = test_model
+    mock_result.output = test_model
     mock_agent_no_tools.run_sync.return_value = mock_result
 
     # Create the operator

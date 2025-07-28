@@ -95,7 +95,7 @@ class AgentDecoratedOperator(_PythonDecoratedOperator):
             raise e
 
         # turn the result into a dict
-        if isinstance(result.data, BaseModel):
-            return result.data.model_dump()
+        if isinstance(result.output, BaseModel):
+            return result.output.model_dump()
 
-        return result.data
+        return result.output
