@@ -3,7 +3,9 @@ This module provides a wrapper around pydantic_ai.Tool for better observability 
 """
 
 from pydantic_ai import Tool as PydanticTool
-from pydantic_ai.tools import AgentDepsT, _messages
+from pydantic_ai.tools import AgentDepsT
+
+from airflow_ai_sdk._compat import _messages
 
 
 class WrappedTool(PydanticTool[AgentDepsT]):
