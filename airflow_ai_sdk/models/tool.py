@@ -3,8 +3,8 @@ This module provides a wrapper around pydantic_ai.Tool for better observability 
 """
 
 from pydantic_ai import Tool as PydanticTool
+from pydantic_ai.messages import RetryPromptPart, ToolCallPart, ToolReturnPart
 from pydantic_ai.tools import AgentDepsT
-from pydantic_ai.messages import ToolCallPart, ToolReturnPart, RetryPromptPart
 
 
 class WrappedTool(PydanticTool[AgentDepsT]):
