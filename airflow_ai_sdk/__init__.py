@@ -4,7 +4,7 @@ This package provides an SDK for building LLM workflows and agents using Apache 
 
 from typing import Any
 
-__version__ = "0.1.4"
+__version__ = "0.1.5"
 
 from airflow_ai_sdk.decorators.agent import agent
 from airflow_ai_sdk.decorators.branch import llm_branch

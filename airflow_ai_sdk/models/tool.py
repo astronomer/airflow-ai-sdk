@@ -3,7 +3,8 @@ This module provides a wrapper around pydantic_ai.Tool for better observability 
 """
 
 from pydantic_ai import Tool as PydanticTool
-from pydantic_ai.tools import AgentDepsT, _messages
+from pydantic_ai.messages import RetryPromptPart, ToolCallPart, ToolReturnPart
+from pydantic_ai.tools import AgentDepsT
 
 
 class WrappedTool(PydanticTool[AgentDepsT]):
@@ -27,10 +28,10 @@ class WrappedTool(PydanticTool[AgentDepsT]):
 
     async def run(
         self,
-        message: _messages.ToolCallPart,
+        message: ToolCallPart,
         *args: object,
         **kwargs: object,
-    ) -> _messages.ToolReturnPart | _messages.RetryPromptPart:
+    ) -> ToolReturnPart | RetryPromptPart:
         """
         Execute the tool with enhanced logging.
 

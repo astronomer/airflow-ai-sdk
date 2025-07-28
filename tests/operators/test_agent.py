@@ -41,7 +41,9 @@ def mock_context():
 def mock_agent_with_tools():
     """Create a mock agent with tools."""
     mock_agent = MagicMock()
-    mock_agent._function_tools = {"tool1": Tool(tool1), "tool2": Tool(tool2)}
+    mock_toolset = MagicMock()
+    mock_toolset.tools = {"tool1": Tool(tool1), "tool2": Tool(tool2)}
+    mock_agent._function_toolset = mock_toolset
     return mock_agent
 
 
@@ -49,7 +51,9 @@ def mock_agent_with_tools():
 def mock_agent_no_tools():
     """Create a mock agent without tools."""
     mock_agent = MagicMock()
-    mock_agent._function_tools = {}
+    mock_toolset = MagicMock()
+    mock_toolset.tools = {}
+    mock_agent._function_toolset = mock_toolset
     return mock_agent
 
 
@@ -78,16 +82,16 @@ def test_init(base_config, mock_agent_with_tools):
         op_kwargs=base_config["op_kwargs"],
     )
 
-    # Make sure the tools were wrapped by checking the agent's function tools' class
-    print(operator.agent._function_tools)
-    assert isinstance(operator.agent._function_tools["tool1"], WrappedTool)
-    assert isinstance(operator.agent._function_tools["tool2"], WrappedTool)
+    # Make sure the tools were wrapped by checking the agent's function toolset tools' class
+    print(operator.agent._function_toolset.tools)
+    assert isinstance(operator.agent._function_toolset.tools["tool1"], WrappedTool)
+    assert isinstance(operator.agent._function_toolset.tools["tool2"], WrappedTool)
 
 def test_execute_with_string_result(base_config, mock_context, mock_agent_no_tools):
     """Test execute method with a string result."""
     # Mock the result of run_sync
     mock_result = MagicMock(spec=AgentRunResult)
-    mock_result.data = "test_result"
+    mock_result.output = "test_result"
     mock_agent_no_tools.run_sync.return_value = mock_result
 
     # Create the operator
@@ -117,7 +121,7 @@ def test_execute_with_base_model_result(base_config, mock_context, mock_agent_no
 
     # Mock the result of run_sync
     mock_result = MagicMock()
-    mock_result.data = test_model
+    mock_result.output = test_model
     mock_agent_no_tools.run_sync.return_value = mock_result
 
     # Create the operator
