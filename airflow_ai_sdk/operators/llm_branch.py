@@ -37,6 +37,7 @@ class LLMBranchDecoratedOperator(AgentDecoratedOperator, BranchMixIn):
     """
 
     custom_operator_name = "@task.llm_branch"
+    inherits_from_skipmixin = True
 
     def __init__(
         self,
