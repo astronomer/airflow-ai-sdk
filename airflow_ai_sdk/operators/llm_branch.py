@@ -102,6 +102,7 @@ class LLMBranchDecoratedOperator(AgentDecoratedOperator, BranchMixIn):
                 "Multiple branches were returned but allow_multiple_branches is False"
             )
 
-        print(f"RESULTTTTTTT: {result}")
+        val = self.do_branch(context, result)
+        print(f"RESULLLLLLLT: {val}")
 
-        return self.do_branch(context, result)
+        return val
