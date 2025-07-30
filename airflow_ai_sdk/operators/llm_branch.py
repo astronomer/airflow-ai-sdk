@@ -103,6 +103,5 @@ class LLMBranchDecoratedOperator(AgentDecoratedOperator, BranchMixIn):
             )
 
         val = self.do_branch(context, result)
-        print(f"RESULLLLLLLT: {val}")
 
         return val
