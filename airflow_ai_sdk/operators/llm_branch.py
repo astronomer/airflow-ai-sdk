@@ -103,6 +103,4 @@ class LLMBranchDecoratedOperator(AgentDecoratedOperator, BranchMixIn):
                 "Multiple branches were returned but allow_multiple_branches is False"
             )
 
-        val = self.do_branch(context, result)
-
-        return val
+        return self.do_branch(context, result)
