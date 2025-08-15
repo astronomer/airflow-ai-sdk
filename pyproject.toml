@@ -24,24 +24,24 @@ classifiers = [
 dependencies = [
     "apache-airflow>=2.7.0",
     "typing-extensions>=4.0.0",
-    "pydantic-ai-slim>=0.4.0",
+    "pydantic-ai-slim>=0.6.0",
 ]
 
 [project.optional-dependencies]
 # models
-openai = ["pydantic-ai-slim[openai]>=0.4.0"]
-cohere = ["pydantic-ai-slim[cohere]>=0.4.0"]
-vertexai = ["pydantic-ai-slim[vertexai]>=0.4.0"]
-anthropic = ["pydantic-ai-slim[anthropic]>=0.4.0"]
-groq = ["pydantic-ai-slim[groq]>=0.4.0"]
-mistral = ["pydantic-ai-slim[mistral]>=0.4.0"]
-bedrock = ["pydantic-ai-slim[bedrock]>=0.4.0"]
+openai = ["pydantic-ai-slim[openai]>=0.6.0"]
+cohere = ["pydantic-ai-slim[cohere]>=0.6.0"]
+vertexai = ["pydantic-ai-slim[vertexai]>=0.6.0"]
+anthropic = ["pydantic-ai-slim[anthropic]>=0.6.0"]
+groq = ["pydantic-ai-slim[groq]>=0.6.0"]
+mistral = ["pydantic-ai-slim[mistral]>=0.6.0"]
+bedrock = ["pydantic-ai-slim[bedrock]>=0.6.0"]
 
 # tools
-duckduckgo = ["pydantic-ai-slim[duckduckgo]>=0.4.0"]
+duckduckgo = ["pydantic-ai-slim[duckduckgo]>=0.6.0"]
 
 # mcp
-mcp = ["pydantic-ai-slim[mcp]>=0.4.0"]
+mcp = ["pydantic-ai-slim[mcp]>=0.6.0"]
 
 [dependency-groups]
 dev = ["ruff>=0.11.2"]

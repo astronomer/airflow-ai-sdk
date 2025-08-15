@@ -3,6 +3,7 @@ This module provides the LLMDecoratedOperator class for making single LLM calls
 within Airflow tasks.
 """
 
+import warnings
 from typing import Any
 
 from pydantic import BaseModel
@@ -43,6 +44,7 @@ class LLMDecoratedOperator(AgentDecoratedOperator):
         model: models.Model | models.KnownModelName,
         system_prompt: str,
         result_type: type[BaseModel] = str,
+        output_type: type[BaseModel] | None = None,
         **kwargs: dict[str, Any],
     ):
         """
@@ -51,12 +53,34 @@ class LLMDecoratedOperator(AgentDecoratedOperator):
         Args:
             model: The LLM model to use for the call.
             system_prompt: The system prompt to use for the call.
-            result_type: Optional Pydantic model type to validate and parse the result.
+            result_type: (Deprecated) Optional Pydantic model type to validate and parse the result.
+                        Use output_type instead.
+            output_type: Optional Pydantic model type to validate and parse the result.
             **kwargs: Additional keyword arguments for the operator.
         """
+        # Handle parameter deprecation - prioritize output_type if provided
+        if output_type is not None:
+            # If both are provided, output_type takes precedence and we warn about result_type
+            if result_type != str:  # str is the default, so only warn if explicitly set
+                warnings.warn(
+                    "`result_type` is deprecated, use `output_type` instead.", 
+                    DeprecationWarning, 
+                    stacklevel=2
+                )
+            final_output_type = output_type
+        else:
+            # Use result_type as fallback, warn if it's not the default
+            if result_type != str:
+                warnings.warn(
+                    "`result_type` is deprecated, use `output_type` instead.", 
+                    DeprecationWarning, 
+                    stacklevel=2
+                )
+            final_output_type = result_type
+        
         agent = Agent(
             model=model,
             system_prompt=system_prompt,
-            result_type=result_type,
+            output_type=final_output_type,
         )
         super().__init__(agent=agent, **kwargs)

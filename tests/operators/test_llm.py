@@ -2,6 +2,7 @@
 Tests for the LLMDecoratedOperator class.
 """
 
+import warnings
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -59,7 +60,7 @@ def test_init_with_default_result_type(base_config, patched_agent_class, patched
     patched_agent_class.assert_called_once_with(
         model=base_config["model"],
         system_prompt=base_config["system_prompt"],
-        result_type=str,
+        output_type=str,
     )
 
     # Verify that AgentDecoratedOperator.__init__ was called with the mock agent
@@ -94,7 +95,7 @@ def test_init_with_custom_result_type(base_config, patched_agent_class, patched_
     patched_agent_class.assert_called_once_with(
         model=base_config["model"],
         system_prompt=base_config["system_prompt"],
-        result_type=TestModel,
+        output_type=TestModel,
     )
 
     # Verify that AgentDecoratedOperator.__init__ was called with the mock agent
@@ -126,7 +127,7 @@ def test_init_with_model_object(base_config, patched_agent_class, patched_super_
     patched_agent_class.assert_called_once_with(
         model=mock_model,
         system_prompt=base_config["system_prompt"],
-        result_type=str,
+        output_type=str,
     )
 
     # Verify that AgentDecoratedOperator.__init__ was called with the mock agent
@@ -137,3 +138,109 @@ def test_init_with_model_object(base_config, patched_agent_class, patched_super_
     assert "op_args" in kwargs
     assert "op_kwargs" in kwargs
     assert "python_callable" in kwargs
+
+
+
+
+def test_init_with_output_type(base_config, patched_agent_class, patched_super_init, mock_agent):
+    """Test initialization with new output_type parameter."""
+    # Create a test model
+    class TestModel(BaseModel):
+        field1: str
+        field2: int
+
+    # Create the operator
+    operator = LLMDecoratedOperator(
+        model=base_config["model"],
+        system_prompt=base_config["system_prompt"],
+        output_type=TestModel,
+        task_id="test_task",
+        op_args=base_config["op_args"],
+        op_kwargs=base_config["op_kwargs"],
+        python_callable=lambda: "test",
+    )
+
+    # Verify that Agent was created with the correct arguments
+    patched_agent_class.assert_called_once_with(
+        model=base_config["model"],
+        system_prompt=base_config["system_prompt"],
+        output_type=TestModel,
+    )
+
+    # Verify that AgentDecoratedOperator.__init__ was called with the mock agent
+    patched_super_init.assert_called_once()
+    args, kwargs = patched_super_init.call_args
+    assert kwargs["agent"] == mock_agent
+
+
+def test_result_type_deprecation_warning(base_config, patched_agent_class, patched_super_init, mock_agent):
+    """Test that using result_type issues a deprecation warning."""
+    # Create a test model
+    class TestModel(BaseModel):
+        field1: str
+        field2: int
+
+    # Capture warnings
+    with warnings.catch_warnings(record=True) as w:
+        warnings.simplefilter("always")
+        
+        # Create the operator with result_type
+        operator = LLMDecoratedOperator(
+            model=base_config["model"],
+            system_prompt=base_config["system_prompt"],
+            result_type=TestModel,
+            task_id="test_task",
+            op_args=base_config["op_args"],
+            op_kwargs=base_config["op_kwargs"],
+            python_callable=lambda: "test",
+        )
+
+        # Verify deprecation warning was issued
+        assert len(w) == 1
+        assert issubclass(w[0].category, DeprecationWarning)
+        assert "`result_type` is deprecated, use `output_type` instead." in str(w[0].message)
+
+    # Verify that Agent was created with output_type
+    patched_agent_class.assert_called_once_with(
+        model=base_config["model"],
+        system_prompt=base_config["system_prompt"],
+        output_type=TestModel,
+    )
+
+
+def test_output_type_precedence_over_result_type(base_config, patched_agent_class, patched_super_init, mock_agent):
+    """Test that output_type takes precedence when both are provided."""
+    # Create test models
+    class TestModelOld(BaseModel):
+        old_field: str
+
+    class TestModelNew(BaseModel):
+        new_field: str
+
+    # Capture warnings
+    with warnings.catch_warnings(record=True) as w:
+        warnings.simplefilter("always")
+        
+        # Create the operator with both parameters
+        operator = LLMDecoratedOperator(
+            model=base_config["model"],
+            system_prompt=base_config["system_prompt"],
+            result_type=TestModelOld,
+            output_type=TestModelNew,
+            task_id="test_task",
+            op_args=base_config["op_args"],
+            op_kwargs=base_config["op_kwargs"],
+            python_callable=lambda: "test",
+        )
+
+        # Verify deprecation warning was issued
+        assert len(w) == 1
+        assert issubclass(w[0].category, DeprecationWarning)
+        assert "`result_type` is deprecated, use `output_type` instead." in str(w[0].message)
+
+    # Verify that Agent was created with output_type (new parameter)
+    patched_agent_class.assert_called_once_with(
+        model=base_config["model"],
+        system_prompt=base_config["system_prompt"],
+        output_type=TestModelNew,  # Should use the new parameter
+    )
