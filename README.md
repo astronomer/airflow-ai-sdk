@@ -21,6 +21,9 @@ Installing with no optional dependencies will give you the slim version of the p
 - **Model support:** All models in the Pydantic AI library (OpenAI, Anthropic, Gemini, etc.)
 - **Embedding tasks with `@task.embed`:** Create vector embeddings from text
 
+> [!TIP]
+> You can find further information and a full DAG example for each of these decorators in the [Airflow AI SDK Decorators & Code Snippets](https://www.astronomer.io/ebooks/quick-notes-airflow-ai-sdk-decorators-code-snippets/) quick notes!
+
 ## Example
 
 ```python
