@@ -46,8 +46,10 @@ class LLMDecoratedOperator(AgentDecoratedOperator):
         self,
         model: models.Model | models.KnownModelName,
         system_prompt: str,
-        output_type: type[BaseModel] | None = _sentinel,  # TODO change to type[BaseModel] = str in 1.0.0
-        result_type: type[BaseModel] | None = _sentinel,  # Deprecated. Will be removed in 1.0.0
+        # TODO change to type[BaseModel] = str in 1.0.0
+        output_type: type[BaseModel] | None = _sentinel,
+        # Deprecated. Will be removed in 1.0.0
+        result_type: type[BaseModel] | None = _sentinel,
         **kwargs: dict[str, Any],
     ):
         """
@@ -82,7 +84,9 @@ class LLMDecoratedOperator(AgentDecoratedOperator):
             output_type = result_type
         else:
             # User configured both output_type and result_type, raise error
-            raise ValueError("Provide only one of `output_type` (preferred) or `result_type` (deprecated), not both.")
+            raise ValueError(
+                "Provide only one of `output_type` (preferred) or `result_type` (deprecated), not both."
+            )
 
         agent = Agent(
             model=model,
