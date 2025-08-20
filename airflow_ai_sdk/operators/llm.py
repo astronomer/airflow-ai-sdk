@@ -64,9 +64,9 @@ class LLMDecoratedOperator(AgentDecoratedOperator):
 
         # In pydantic-ai==0.6.0, result_type was replaced by output_type. In airflow-ai-sdk, to avoid breaking
         # changes, we'd like to support result_type until airflow-ai-sdk==1.0.0.
-        # We have to do type ping-ponging here to continue supporting result_type with default value str until
-        # 1.0.0. The intended behaviour is that output_type and result_type are optional and default to str.
-        # To distinguish between a default and user-supplied value, we have to use a sentinel.
+        # Because we want to raise a DeprecationWarning in case the user configures result_type, the arguments
+        # default to a sentinel value, which enables us to distinguish between user-supplied values and
+        # default values. This can be removed once we release airflow-ai-sdk==1.0.0.
         if output_type is self._sentinel and result_type is self._sentinel:
             # User didn't configure either, default to str
             output_type = str

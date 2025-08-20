@@ -17,7 +17,6 @@ if TYPE_CHECKING:
 def llm(
     model: models.Model | models.KnownModelName,
     system_prompt: str,
-    output_type: type[BaseModel] | None = None,
     **kwargs: dict[str, Any],
 ) -> "TaskDecorator":
     """
@@ -32,7 +31,6 @@ def llm(
     ```
     """
     kwargs["model"] = model
-    kwargs["output_type"] = output_type
     kwargs["system_prompt"] = system_prompt
     return task_decorator_factory(
         decorated_operator_class=LLMDecoratedOperator,
