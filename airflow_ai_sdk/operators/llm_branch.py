@@ -85,7 +85,7 @@ class LLMBranchDecoratedOperator(AgentDecoratedOperator, BranchMixIn):
         self.agent = Agent(
             model=self.model,
             system_prompt=self.system_prompt,
-            result_type=downstream_tasks_enum,
+            output_type=downstream_tasks_enum,
         )
 
         result = super().execute(context)

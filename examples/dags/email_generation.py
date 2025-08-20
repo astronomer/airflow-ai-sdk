@@ -62,7 +62,7 @@ class Email(ai_sdk.BaseModel):
 
 @task.llm(
     model="o3-mini",
-    result_type=Email,
+    output_type=Email,
     system_prompt="""
     You are a sales agent who is responsible for generating personalized email messages for prospects for Astro,
     the best managed Airflow service on the market. Given the audience is technical, you should focus on the

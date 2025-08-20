@@ -38,7 +38,7 @@ class ProductFeedbackSummary(ai_sdk.BaseModel):
     feature_requests: list[str]
 
 
-@task.llm(model="gpt-4o-mini", result_type=ProductFeedbackSummary, system_prompt="Extract the summary, sentiment, and feature requests from the product feedback.",)
+@task.llm(model="gpt-4o-mini", output_type=ProductFeedbackSummary, system_prompt="Extract the summary, sentiment, and feature requests from the product feedback.",)
 def summarize_product_feedback(feedback: str | None = None) -> ProductFeedbackSummary:
     """
     This task summarizes the product feedback. You can add logic here to transform the input
