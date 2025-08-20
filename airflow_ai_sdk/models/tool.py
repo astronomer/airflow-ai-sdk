@@ -56,9 +56,7 @@ class WrappedTool(PydanticTool[AgentDepsT]):
         return result
 
     @classmethod
-    def from_pydantic_tool(
-        cls, tool: PydanticTool[AgentDepsT]
-    ) -> "WrappedTool[AgentDepsT]":
+    def from_pydantic_tool(cls, tool: PydanticTool[AgentDepsT]) -> "WrappedTool[AgentDepsT]":
         """
         Create a WrappedTool instance from a pydantic_ai.Tool.
 

@@ -63,10 +63,7 @@ class AgentDecoratedOperator(_PythonDecoratedOperator):
         self.agent = agent
 
         # wrapping the tool will print the tool call and the result in an airflow log group for better observability
-        if (
-            hasattr(self.agent, "_function_toolset")
-            and self.agent._function_toolset.tools
-        ):
+        if hasattr(self.agent, "_function_toolset") and self.agent._function_toolset.tools:
             wrapped_tools = {
                 name: WrappedTool.from_pydantic_tool(tool)
                 for name, tool in self.agent._function_toolset.tools.items()
