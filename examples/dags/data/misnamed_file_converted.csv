@@ -1,0 +1,7 @@
+order_id,customer_name,product,quantity,total_price,order_date
+10001,John Doe,Laptop,1,999.99,2024-01-15
+10002,Jane Smith,Mouse,3,89.97,2024-01-16
+10003,Bob Johnson,Monitor,2,699.98,2024-01-17
+10004,Alice Brown,Keyboard,1,79.99,2024-01-18
+10005,Charlie Davis,Webcam,1,89.99,2024-01-19
+10006,Emma Wilson,USB Cable,5,49.95,2024-01-20

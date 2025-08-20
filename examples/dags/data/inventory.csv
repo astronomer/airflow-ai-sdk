@@ -1,0 +1,8 @@
+product_id,product_name,category,stock,price,last_updated
+1001,Laptop,Electronics,45,999.99,2024-01-20
+1002,Mouse,Accessories,150,29.99,2024-01-19
+1003,Monitor,Electronics,23,349.99,2024-01-18
+1004,Keyboard,Accessories,87,79.99,2024-01-20
+1005,Webcam,Electronics,62,89.99,2024-01-17
+1006,USB Cable,Accessories,200,9.99,2024-01-20
+1007,Headphones,Audio,34,149.99,2024-01-19

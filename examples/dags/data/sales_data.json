@@ -1,0 +1,47 @@
+{
+  "metadata": {
+    "generated_at": "2024-01-20",
+    "version": "1.0"
+  },
+  "sales_records": [
+    {
+      "category": "Electronics",
+      "customer": {
+        "email": "john@example.com",
+        "location": "New York",
+        "name": "John Doe"
+      },
+      "date": "2024-01-15",
+      "id": 1001,
+      "price": 999.99,
+      "product": "Laptop",
+      "quantity": 2
+    },
+    {
+      "category": "Accessories",
+      "customer": {
+        "email": "jane@example.com",
+        "location": "Los Angeles",
+        "name": "Jane Smith"
+      },
+      "date": "2024-01-16",
+      "id": 1002,
+      "price": 29.99,
+      "product": "Mouse",
+      "quantity": 5
+    },
+    {
+      "category": "Electronics",
+      "customer": {
+        "email": "bob@example.com",
+        "location": "Chicago",
+        "name": "Bob Johnson"
+      },
+      "date": "2024-01-17",
+      "id": 1003,
+      "price": 349.99,
+      "product": "Monitor",
+      "quantity": 1
+    }
+  ]
+}
