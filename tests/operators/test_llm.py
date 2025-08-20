@@ -141,7 +141,7 @@ def test_init_with_model_object(base_config, patched_agent_class, patched_super_
     assert "python_callable" in kwargs
 
 
-def test_deprecated_call():
+def test_deprecated_call(base_config, patched_agent_class, patched_super_init, mock_agent):
     """
     Check for a deprecation warning from result_type.
     TODO remove test after removing support for result_type in airflow-ai-sdk 1.0.0.
@@ -170,7 +170,9 @@ def test_deprecated_call():
         )
 
 
-def test_no_deprecation_calls(recwarn: WarningsRecorder):
+def test_no_deprecation_calls(
+    recwarn: WarningsRecorder, base_config, patched_agent_class, patched_super_init, mock_agent
+):
     """We expect no deprecation warnings using these arguments."""
     LLMDecoratedOperator(
         task_id="test",
