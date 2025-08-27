@@ -21,7 +21,7 @@ import airflow_ai_sdk as ai_sdk
 
 @task.llm(
     model="gpt-4o-mini",  # model name
-    result_type=str,       # return type
+    output_type=str,       # return type
     system_prompt="You are a helpful assistant."  # system prompt for the LLM
 )
 def process_with_llm(input_text: str) -> str:
@@ -52,7 +52,7 @@ class TextAnalysis(ai_sdk.BaseModel):
 
 @task.llm(
     model="gpt-4o-mini",
-    result_type=TextAnalysis,
+    output_type=TextAnalysis,
     system_prompt="Analyze the provided text."
 )
 def analyze_text(text: str) -> TextAnalysis:
@@ -134,7 +134,7 @@ You can use Airflow's built-in error handling features with these tasks:
 ```python
 @task.llm(
     model="gpt-4o-mini",
-    result_type=str,
+    output_type=str,
     system_prompt="Answer the question.",
     retries=3,  # retry 3 times if the task fails
     retry_delay=pendulum.duration(seconds=30),  # wait 30 seconds between retries

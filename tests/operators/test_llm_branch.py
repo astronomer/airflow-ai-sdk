@@ -131,7 +131,7 @@ def test_execute_with_enum_result(base_config, mock_context, mock_agent):
                     # Call execute
                     result = operator.execute(mock_context)
 
-                    # Verify a new Agent was created with the correct enum result_type
+                    # Verify a new Agent was created with the correct enum output_type
                     assert mock_agent_class.call_count == 2  # Once in __init__ and once in execute
 
                     # Verify that super().execute was called

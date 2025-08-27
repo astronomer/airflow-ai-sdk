@@ -35,7 +35,7 @@ from airflow.models.dagrun import DagRun
 
 @task.llm(
     model="gpt-4o-mini",
-    result_type=Literal["positive", "negative", "neutral"],
+    output_type=Literal["positive", "negative", "neutral"],
     system_prompt="Classify the sentiment of the given text.",
 )
 def process_with_llm(dag_run: DagRun) -> str:

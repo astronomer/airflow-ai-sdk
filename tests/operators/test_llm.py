@@ -5,6 +5,7 @@ Tests for the LLMDecoratedOperator class.
 from unittest.mock import MagicMock, patch
 
 import pytest
+from _pytest.recwarn import WarningsRecorder
 from pydantic import BaseModel
 from pydantic_ai.models import Model
 
@@ -43,8 +44,8 @@ def patched_super_init():
         yield mock_super_init
 
 
-def test_init_with_default_result_type(base_config, patched_agent_class, patched_super_init, mock_agent):
-    """Test initialization with default result type (str)."""
+def test_init_with_default_output_type(base_config, patched_agent_class, patched_super_init, mock_agent):
+    """Test initialization with default output type (str)."""
     # Create the operator
     operator = LLMDecoratedOperator(
         model=base_config["model"],
@@ -59,7 +60,7 @@ def test_init_with_default_result_type(base_config, patched_agent_class, patched
     patched_agent_class.assert_called_once_with(
         model=base_config["model"],
         system_prompt=base_config["system_prompt"],
-        result_type=str,
+        output_type=str,
     )
 
     # Verify that AgentDecoratedOperator.__init__ was called with the mock agent
@@ -72,8 +73,9 @@ def test_init_with_default_result_type(base_config, patched_agent_class, patched
     assert "python_callable" in kwargs
 
 
-def test_init_with_custom_result_type(base_config, patched_agent_class, patched_super_init, mock_agent):
-    """Test initialization with custom result type."""
+def test_init_with_custom_output_type(base_config, patched_agent_class, patched_super_init, mock_agent):
+    """Test initialization with custom output type."""
+
     # Create a test model
     class TestModel(BaseModel):
         field1: str
@@ -83,7 +85,7 @@ def test_init_with_custom_result_type(base_config, patched_agent_class, patched_
     operator = LLMDecoratedOperator(
         model=base_config["model"],
         system_prompt=base_config["system_prompt"],
-        result_type=TestModel,
+        output_type=TestModel,
         task_id="test_task",
         op_args=base_config["op_args"],
         op_kwargs=base_config["op_kwargs"],
@@ -94,7 +96,7 @@ def test_init_with_custom_result_type(base_config, patched_agent_class, patched_
     patched_agent_class.assert_called_once_with(
         model=base_config["model"],
         system_prompt=base_config["system_prompt"],
-        result_type=TestModel,
+        output_type=TestModel,
     )
 
     # Verify that AgentDecoratedOperator.__init__ was called with the mock agent
@@ -126,7 +128,7 @@ def test_init_with_model_object(base_config, patched_agent_class, patched_super_
     patched_agent_class.assert_called_once_with(
         model=mock_model,
         system_prompt=base_config["system_prompt"],
-        result_type=str,
+        output_type=str,
     )
 
     # Verify that AgentDecoratedOperator.__init__ was called with the mock agent
@@ -137,3 +139,48 @@ def test_init_with_model_object(base_config, patched_agent_class, patched_super_
     assert "op_args" in kwargs
     assert "op_kwargs" in kwargs
     assert "python_callable" in kwargs
+
+
+def test_deprecated_call(base_config, patched_agent_class, patched_super_init, mock_agent):
+    """
+    Check for a deprecation warning from result_type.
+    TODO remove test after removing support for result_type in airflow-ai-sdk 1.0.0.
+    """
+    with pytest.deprecated_call():
+        LLMDecoratedOperator(
+            task_id="test",
+            system_prompt="Test me",
+            model="gpt-4",
+            op_args=[],
+            op_kwargs={},
+            python_callable=lambda: "test",
+            result_type=str,
+        )
+
+    with pytest.raises(ValueError):
+        LLMDecoratedOperator(
+            task_id="test",
+            system_prompt="Test me",
+            model="gpt-4",
+            op_args=[],
+            op_kwargs={},
+            python_callable=lambda: "test",
+            result_type=str,
+            output_type=str,
+        )
+
+
+def test_no_deprecation_calls(
+    recwarn: WarningsRecorder, base_config, patched_agent_class, patched_super_init, mock_agent
+):
+    """We expect no deprecation warnings using these arguments."""
+    LLMDecoratedOperator(
+        task_id="test",
+        system_prompt="Test me",
+        model="gpt-4",
+        op_args=[],
+        op_kwargs={},
+        python_callable=lambda: "test",
+        output_type=str,
+    )
+    assert len(recwarn) == 0

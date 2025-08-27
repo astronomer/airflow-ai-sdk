@@ -25,7 +25,7 @@ Shows how to use `@task.llm` with Pydantic models to parse structured data from 
 **Features demonstrated:**
 - Creating a custom Pydantic model for structured LLM output
 - PII masking in preprocessing
-- Using `result_type` parameter with a Pydantic model
+- Using `output_type` parameter with a Pydantic model
 - Task mapping with `expand()` to process multiple feedback items
 - Conditional execution with `AirflowSkipException`
 
