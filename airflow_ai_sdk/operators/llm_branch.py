@@ -99,8 +99,6 @@ class LLMBranchDecoratedOperator(AgentDecoratedOperator, BranchMixIn):
             result = str(result)
 
         if isinstance(result, list) and not self.allow_multiple_branches:
-            raise ValueError(
-                "Multiple branches were returned but allow_multiple_branches is False"
-            )
+            raise ValueError("Multiple branches were returned but allow_multiple_branches is False")
 
         return self.do_branch(context, result)

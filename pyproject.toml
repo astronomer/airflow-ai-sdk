@@ -57,7 +57,7 @@ provider_info = "airflow_ai_sdk:get_provider_info"
 
 
 [tool.ruff]
-line-length = 88
+line-length = 110
 indent-width = 4
 exclude = ["tests", "examples"]
 
