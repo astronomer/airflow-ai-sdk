@@ -5,11 +5,11 @@ build-backend = "hatchling.build"
 [project]
 name = "airflow-ai-sdk"
 dynamic = ["version"]
-description = "SDK for building LLM workflows and agents using Apache Airflow"
+description = "[DEPRECATED - use apache-airflow-providers-common-ai] SDK for building LLM workflows and agents using Apache Airflow"
 readme = "README.md"
 requires-python = ">=3.10"
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 7 - Inactive",
     "Framework :: Apache Airflow",
     "Framework :: Apache Airflow :: Provider",
     "Intended Audience :: Developers",
